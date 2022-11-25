@@ -1,0 +1,58 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Person {
+    + string firstName
+    + string lastName
+}
+
+abstract class Doctor {
+
+}
+
+class DoctorBySpeciality {
+
+}
+
+class Patient {
+
+}
+
+class DateTime {
+    + int year
+    + int month
+    + int day
+    + int hours
+    + int minutes
+}
+
+class Appointment {
+    + Doctor doctor
+    + Patient patient
+    + DateTime dateTime
+}
+
+class Schedule {
+    - Appointment[] appointments
+    + Appointment createAppointment (doctor, patient, dateTime)
+    + Appointment[] getDoctorAppointments (doctor)
+    + Appointment[] getPatientAppointments (patient)
+    + Appointment[] getAppointmentsInRange(start, end)
+}
+
+Person <|-down-- Doctor
+Person <|-down-- Patient
+
+
+Doctor <|-- DoctorBySpeciality
+
+Appointment o-down-> DateTime
+Appointment o-right--> Patient
+Appointment o-right--> Doctor
+
+Schedule *---> Appointment
+Schedule ...> Patient
+Schedule ...> Doctor
+Schedule ...> DateTime
+
+@enduml

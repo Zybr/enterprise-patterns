@@ -1,58 +1,65 @@
 @startuml
-'https://plantuml.com/class-diagram
+
+class ScheduleService {
+    + isDoctorFree (doctor, interval): boolean
+    + enrolToDoctor (doctor, patient, interval): Appointment
+}
 
 class Person {
-    + string firstName
-    + string lastName
+    + firstName: string
+    + lastName: string
+}
+
+class Dairy {
+    - appointments: Appointment[]
+    + isFree (interval): boolean
+    + addAppointment (patient, interval): Appointment
 }
 
 abstract class Doctor {
-
-}
-
-class DoctorBySpeciality {
-
+    - dairy: Dairy
+    + isFree (interval): boolean
+    + addAppointment (patient, interval): Appointment
 }
 
 class Patient {
 
 }
 
-class DateTime {
-    + int year
-    + int month
-    + int day
-    + int hours
-    + int minutes
+class Time {
+    + year: int
+    + month: int
+    + day: int
+    + hours: int
+    + minutes: int
+}
+
+class TimeInterval {
+    + start: Time
+    + end: Time
 }
 
 class Appointment {
-    + Doctor doctor
-    + Patient patient
-    + DateTime dateTime
+    + patient: Patient
+    + interval: TimeInterval
 }
 
-class Schedule {
-    - Appointment[] appointments
-    + Appointment createAppointment (doctor, patient, dateTime)
-    + Appointment[] getDoctorAppointments (doctor)
-    + Appointment[] getPatientAppointments (patient)
-    + Appointment[] getAppointmentsInRange(start, end)
-}
+ScheduleService ...> Doctor
+ScheduleService ...> Patient
+ScheduleService ...> TimeInterval
 
 Person <|-down-- Doctor
 Person <|-down-- Patient
 
+Doctor *-right-> Dairy
+Dairy o--> Appointment
+Appointment o-down-> TimeInterval
+TimeInterval o--> Time
 
-Doctor <|-- DoctorBySpeciality
+Doctor <|-- Therapist
+Doctor <|-- Cardiologist
+Doctor <|-- Oncologist
 
-Appointment o-down-> DateTime
 Appointment o-right--> Patient
-Appointment o-right--> Doctor
-
-Schedule *---> Appointment
-Schedule ...> Patient
-Schedule ...> Doctor
-Schedule ...> DateTime
 
 @enduml

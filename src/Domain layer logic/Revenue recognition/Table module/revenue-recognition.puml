@@ -12,13 +12,13 @@ class Product {
     + price: int
 }
 
-class Budget {
+class Contract {
     + id: int
     + money: int
 }
 
-Entity <|-- Budget
+Entity <|-- Contract
 Entity <|-- Product
-Budget "1..*" *-right-> Product
+Contract "1..*" *-right-> Product
 
 @enduml

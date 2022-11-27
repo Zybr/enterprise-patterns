@@ -4,7 +4,7 @@ import { db } from "../../../../../database/db";
 import Entity from "./Entity";
 import { handlePromiseError } from "../../Utils/utils";
 
-export default class BudgetEntity extends IdMixin(Entity) {
+export default class ContractEntity extends IdMixin(Entity) {
   private money: number = 0;
 
   public save(): Promise<this> {
@@ -13,7 +13,7 @@ export default class BudgetEntity extends IdMixin(Entity) {
     return this.isNew()
       ? new Promise<this>(
         (resolve, reject) => db.run(
-          `INSERT INTO budgets(money)
+          `INSERT INTO contracts(money)
            VALUES (0)`,
           function(err) {
             handlePromiseError(reject, err);
@@ -24,7 +24,7 @@ export default class BudgetEntity extends IdMixin(Entity) {
       )
       : new Promise<this>(
         (resolve, reject) => db.run(
-          `UPDATE budgets
+          `UPDATE contracts
            SET money = ?
            WHERE id = ?`,
           [self.getMoney(), self.getId()],
@@ -43,7 +43,7 @@ export default class BudgetEntity extends IdMixin(Entity) {
         handlePromiseError(reject, err);
         resolve(
           rows.map(
-            row => new ProductEntity(parseInt(row['budget_id']), row['type'])
+            row => new ProductEntity(parseInt(row['contract_id']), row['type'])
               .setId(row['id'])
               .setStartDate(new Date(Date.parse(row['start_date'])))
               .setPrice(row['price'])

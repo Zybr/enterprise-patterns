@@ -1,19 +1,9 @@
 import { db } from "../../../../database/db";
 import { dateToDatabase, handlePromiseError } from "./utils";
 
-export const removeBudgets = (): Promise<null> => new Promise(
+export const createContract = () => new Promise<number>(
   (resolve, reject) => db.run(
-    'DELETE FROM budgets WHERE TRUE',
-    (err) => {
-      handlePromiseError(reject, err);
-      resolve(null);
-    }
-  )
-);
-
-export const createBudget = () => new Promise<number>(
-  (resolve, reject) => db.run(
-    `INSERT INTO budgets(money)
+    `INSERT INTO contracts(money)
      VALUES (0)`,
     function(err) {
       handlePromiseError(reject, err);
@@ -32,12 +22,12 @@ export const removeProducts = (): Promise<null> => new Promise(
   )
 );
 
-export const createProduct = ({budgetId, type, day, price}) => new Promise<number>(
+export const createProduct = ({contractId, type, day, price}) => new Promise<number>(
   (resolve, reject) => db.run(
-    `INSERT INTO products(budget_id, type, start_date, price)
+    `INSERT INTO products(contract_id, type, start_date, price)
      VALUES (?, ?, ?, ?)`,
     [
-      budgetId,
+      contractId,
       type,
       dateToDatabase(makeDate(day)),
       price,
@@ -49,9 +39,9 @@ export const createProduct = ({budgetId, type, day, price}) => new Promise<numbe
   )
 );
 
-export const getBudgetMoney = (id: number): Promise<number> => {
+export const getContractMoney = (id: number): Promise<number> => {
   return new Promise((resolve, reject) => db.get(
-    'SELECT money FROM budgets WHERE id = ?',
+    'SELECT money FROM contracts WHERE id = ?',
     [id],
     (err, row) => {
       handlePromiseError(reject, err);

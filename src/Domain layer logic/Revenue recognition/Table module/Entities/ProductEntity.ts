@@ -5,12 +5,12 @@ import { db } from "../../../../../database/db";
 import { dateToDatabase, handlePromiseError } from "../../Utils/utils";
 
 export default class ProductEntity extends IdMixin(Entity) {
-  private readonly budgetId: number;
+  private readonly contractId: number;
   private readonly type: ProductType;
   private price: number = 0;
   private startDate: Date;
 
-  public constructor(budgetId: number, type: ProductType) {
+  public constructor(contractId: number, type: ProductType) {
     super();
 
     this.type = type;
@@ -23,10 +23,10 @@ export default class ProductEntity extends IdMixin(Entity) {
     return this.isNew()
       ? new Promise<this>(
         (resolve, reject) => db.run(
-          `INSERT INTO products(budget_id, type, start_date, price)
+          `INSERT INTO products(contract_id, type, start_date, price)
            VALUES (?, ?, ?, ?)`,
           [
-            this.budgetId,
+            this.contractId,
             this.type,
             dateToDatabase(this.startDate),
             this.price,
@@ -40,7 +40,7 @@ export default class ProductEntity extends IdMixin(Entity) {
       )
       : new Promise<this>(
         (resolve, reject) => db.run(
-          `UPDATE budgets
+          `UPDATE contracts
            SET money = ?
            WHERE id = ?`,
           [self.getMoney(), self.getId()],

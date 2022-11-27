@@ -2,19 +2,27 @@ import { db } from "../../../../database/db";
 import { ProductType } from "../Enums/ProductType";
 import { getPassedDays, handlePromiseError } from "../Utils/utils";
 
-export default class Finance {
+export default class RecognitionService {
   /** Business logic methods */
 
-  /** Calculate and store total revenue of all products connected to the budget */
-  public updateRevenue(budgetId: number): Promise<boolean> {
-    return this.calculateTotalRecognition(budgetId)
-      .then(totalRecognition => this.storeBudget(budgetId, totalRecognition));
+  /**
+   * Calculate and store total revenue of all products connected to the contract/
+   * @param contractId
+   * @return Promise Current revenue
+   */
+  public updateRevenue(contractId: number): Promise<number> {
+    return this
+      .calculateTotalRecognition(contractId)
+      .then(totalRecognition =>
+        this.storeContract(contractId, totalRecognition)
+          .then(() => totalRecognition)
+      );
   }
 
   /** Calculate summary recognition of all products */
-  private calculateTotalRecognition(budgetId: number): Promise<number> {
+  private calculateTotalRecognition(contractId: number): Promise<number> {
     return this
-      .fetchProducts(budgetId) // Fetch all products from DB
+      .fetchProducts(contractId) // Fetch all products from DB
       .then(
         products => products.reduce( // Sum available money of each product
           (sum, product) => sum + this.calculateProductRecognition( // Define available money of product
@@ -61,11 +69,11 @@ export default class Finance {
 
   /** DB methods */
 
-  /** Get all budget products */
-  private fetchProducts(budgetId: number): Promise<[][]> {
+  /** Get all contract products */
+  private fetchProducts(contractId: number): Promise<[][]> {
     return new Promise((resolve, reject) => db.all(
-      "SELECT id, type, start_date, price FROM products where budget_id = ?",
-      [budgetId],
+      "SELECT id, type, start_date, price FROM products where contract_id = ?",
+      [contractId],
       (err, rows: [][]) => {
         handlePromiseError(reject, err);
         resolve(rows);
@@ -74,11 +82,11 @@ export default class Finance {
   }
 
   /** Save current recognition */
-  private storeBudget(budgetId: number, money: number): Promise<boolean> {
+  private storeContract(contractId: number, money: number): Promise<boolean> {
     return new Promise(
       (resolve, reject) => db.run(
-        'UPDATE budgets SET money = ? WHERE id = ?',
-        [money, budgetId],
+        'UPDATE contracts SET money = ? WHERE id = ?',
+        [money, contractId],
         function(err) {
           handlePromiseError(reject, err);
           resolve(this.changes > 0);

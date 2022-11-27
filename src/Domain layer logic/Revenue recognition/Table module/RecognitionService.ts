@@ -1,22 +1,22 @@
 import ProductEntity from "./Entities/ProductEntity";
 import { ProductType } from "../Enums/ProductType";
-import BudgetEntity from "./Entities/BudgetEntity";
+import ContractEntity from "./Entities/ContractEntity";
 import { getPassedDays } from "../Utils/utils";
 
-export default class Finance {
+export default class RecognitionService {
 
-  /** Calculate and store total revenue of all products connected to the budget */
-  public updateRevenue(budget: BudgetEntity): Promise<BudgetEntity> {
-    return this.calculateTotalRecognition(budget)
-      .then(totalRecognition => budget
+  /** Calculate and store total revenue of all products connected to the contract */
+  public updateRevenue(contract: ContractEntity): Promise<ContractEntity> {
+    return this.calculateTotalRecognition(contract)
+      .then(totalRecognition => contract
         .setMoney(totalRecognition)
         .save()
       );
   }
 
   /** Calculate summary recognition of all products */
-  private calculateTotalRecognition(budget: BudgetEntity): Promise<number> {
-    return budget
+  private calculateTotalRecognition(contract: ContractEntity): Promise<number> {
+    return contract
       .getProducts()
       .then(
         products => products.reduce( // Sum available money of each product

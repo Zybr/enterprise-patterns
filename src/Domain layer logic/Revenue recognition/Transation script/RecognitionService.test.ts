@@ -1,7 +1,7 @@
-import Finance from "./Finance";
+import RecognitionService from "./RecognitionService";
 import { ProductType } from "../Enums/ProductType";
 import { initDb } from "../../../../database/db";
-import { createBudget, createProduct, getBudgetMoney, removeBudgets, removeProducts } from "../Utils/database";
+import { createContract, createProduct, getContractMoney, removeProducts } from "../Utils/database";
 import { updateRevenueSets } from "../Tests data/updateRevenueSets";
 
 const TYPE_SHORT = {
@@ -10,14 +10,13 @@ const TYPE_SHORT = {
   [ProductType.SPREADSHEET]: 'SS',
 };
 
-describe('Finance', () => {
-  const finance = new Finance();
-  let budgetId: number | null = null;
+describe('RecognitionService by Transaction script', () => {
+  const finance = new RecognitionService();
+  let contractId: number | null = null;
 
   beforeAll(async () => {
     initDb();
-    await removeBudgets();
-    budgetId = await createBudget();
+    contractId = await createContract();
   });
 
   beforeEach(async () => {
@@ -35,13 +34,14 @@ describe('Finance', () => {
         test(title, async () => {
           await Promise.all(
             products.map(
-              async productData => await createProduct({budgetId, ...productData})
+              async productData => await createProduct({contractId, ...productData})
             )
           );
 
-          await finance.updateRevenue(budgetId)
+          const revenue = await finance.updateRevenue(contractId)
 
-          expect(await getBudgetMoney(budgetId)).toEqual(expectedMoney);
+          expect(revenue).toEqual(expectedMoney);
+          expect(await getContractMoney(contractId)).toEqual(expectedMoney);
         });
       })
   });

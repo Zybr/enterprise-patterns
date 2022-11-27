@@ -1,8 +1,8 @@
-import Finance from "./Finance";
+import RecognitionService from "./RecognitionService";
 import { ProductType } from "../Enums/ProductType";
 import { db, initDb } from "../../../../database/db";
-import { createBudget, createProduct, removeBudgets, removeProducts } from "../Utils/database";
-import BudgetEntity from "./Entities/BudgetEntity";
+import { createContract, createProduct, getContractMoney, removeProducts } from "../Utils/database";
+import ContractEntity from "./Entities/ContractEntity";
 import { handlePromiseError } from "../Utils/utils";
 import { updateRevenueSets } from "../Tests data/updateRevenueSets";
 
@@ -12,19 +12,19 @@ const TYPE_SHORT = {
   [ProductType.SPREADSHEET]: 'SS',
 };
 
-const getBudgetById = (id: number): Promise<BudgetEntity> => {
-  return new Promise<BudgetEntity>(((resolve, reject) => {
+const getContractById = (id: number): Promise<ContractEntity> => {
+  return new Promise<ContractEntity>(((resolve, reject) => {
     db.get(
-      'SELECT id, money FROM budgets WHERE id = ?',
+      'SELECT id, money FROM contracts WHERE id = ?',
       [id],
       (err, row) => {
         if (!err && !row) {
-          err = new Error(`There is not Budget with ID: ${id}`);
+          err = new Error(`There is not Contract with ID: ${id}`);
         }
 
         handlePromiseError(reject, err);
         resolve(
-          new BudgetEntity()
+          new ContractEntity()
             .setId(row['id'])
             .setMoney(row['money'])
         )
@@ -33,15 +33,14 @@ const getBudgetById = (id: number): Promise<BudgetEntity> => {
   }));
 }
 
-describe('Finance', () => {
-  const finance = new Finance();
-  let budget: BudgetEntity;
+describe('RecognitionService by Table module', () => {
+  const finance = new RecognitionService();
+  let contract: ContractEntity;
 
   beforeAll(async () => {
     initDb();
-    await removeBudgets();
-    const budgetId = await createBudget();
-    budget = await getBudgetById(budgetId);
+    const contractId = await createContract();
+    contract = await getContractById(contractId);
   });
 
   beforeEach(async () => {
@@ -60,15 +59,16 @@ describe('Finance', () => {
           await Promise.all(
             products.map(
               async productData => await createProduct({
-                budgetId: budget.getId(),
+                contractId: contract.getId(),
                 ...productData
               })
             )
           );
 
-          await finance.updateRevenue(budget)
+          await finance.updateRevenue(contract)
 
-          expect(budget.getMoney()).toEqual(expectedMoney);
+          expect(contract.getMoney()).toEqual(expectedMoney);
+          expect(await getContractMoney(contract.getId())).toEqual(expectedMoney);
         });
       })
   });

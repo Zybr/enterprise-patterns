@@ -1,0 +1,71 @@
+import { db } from "../../../../database/db";
+import { dateToDatabase, handlePromiseError } from "./utils";
+
+export const removeBudgets = (): Promise<null> => new Promise(
+  (resolve, reject) => db.run(
+    'DELETE FROM budgets WHERE TRUE',
+    (err) => {
+      handlePromiseError(reject, err);
+      resolve(null);
+    }
+  )
+);
+
+export const createBudget = () => new Promise<number>(
+  (resolve, reject) => db.run(
+    `INSERT INTO budgets(money)
+     VALUES (0)`,
+    function(err) {
+      handlePromiseError(reject, err);
+      resolve(this.lastID);
+    }
+  )
+);
+
+export const removeProducts = (): Promise<null> => new Promise(
+  (resolve, reject) => db.run(
+    'DELETE FROM products WHERE TRUE',
+    (err) => {
+      handlePromiseError(reject, err);
+      resolve(null);
+    }
+  )
+);
+
+export const createProduct = ({budgetId, type, day, price}) => new Promise<number>(
+  (resolve, reject) => db.run(
+    `INSERT INTO products(budget_id, type, start_date, price)
+     VALUES (?, ?, ?, ?)`,
+    [
+      budgetId,
+      type,
+      dateToDatabase(makeDate(day)),
+      price,
+    ],
+    function(err) {
+      handlePromiseError(reject, err);
+      resolve(this.lastID);
+    }
+  )
+);
+
+export const getBudgetMoney = (id: number): Promise<number> => {
+  return new Promise((resolve, reject) => db.get(
+    'SELECT money FROM budgets WHERE id = ?',
+    [id],
+    (err, row) => {
+      handlePromiseError(reject, err);
+      resolve(row['money']);
+    }
+  ));
+}
+
+export const makeDate = (day: number) => {
+  const date = (new Date())
+
+  date.setTime(
+    (new Date()).getTime() - (day - 1) * 1000 * 60 * 60 * 24
+  );
+
+  return date;
+}

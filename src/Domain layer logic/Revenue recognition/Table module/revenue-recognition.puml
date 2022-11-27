@@ -1,0 +1,24 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Entity {
+    {abstract} + save()
+}
+
+class Product {
+    + id: int
+    + type: string
+    + startDate: Date
+    + price: int
+}
+
+class Budget {
+    + id: int
+    + money: int
+}
+
+Entity <|-- Budget
+Entity <|-- Product
+Budget "1..*" *-right-> Product
+
+@enduml

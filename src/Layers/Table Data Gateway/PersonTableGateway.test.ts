@@ -1,18 +1,18 @@
-import { initDb } from "../../../database/db";
+import { db, initDb } from "../../../database/db";
 import { clearTable, selectById } from "../../Utils/database";
-import { createPerson, makePerson } from "../Utils/database";
+import { createPersonData, makePersonData } from "../Utils/database";
 import PersonTableGateway from "./PersonTableGateway";
 import { faker } from '@faker-js/faker';
-import Person from "./Person";
+import PersonData from "../Types/PersonData";
 
-const assertEqualPersons = (personA: Person, personB: Person): void => {
+const assertEqualPersons = (personA: PersonData, personB: PersonData): void => {
   expect(personA.id).toEqual(personB.id);
   expect(personA.first_name).toEqual(personB.first_name);
   expect(personA.last_name).toEqual(personB.last_name);
   expect(personA.email).toEqual(personB.email);
 }
 
-const tableGateway = new PersonTableGateway();
+const tableGateway = new PersonTableGateway(db);
 
 describe('PersonTableGateway', () => {
   beforeAll(initDb);
@@ -22,8 +22,8 @@ describe('PersonTableGateway', () => {
   })
 
   test('findAll()', async () => {
-    const personA = await createPerson();
-    const personB = await createPerson();
+    const personA = await createPersonData();
+    const personB = await createPersonData();
 
     const persons = await tableGateway.findAll();
 
@@ -33,8 +33,8 @@ describe('PersonTableGateway', () => {
   });
 
   test('find()', async () => {
-    await createPerson();
-    const personB = await createPerson();
+    await createPersonData();
+    const personB = await createPersonData();
 
     const personFetched = await tableGateway.find(personB.id);
 
@@ -42,7 +42,7 @@ describe('PersonTableGateway', () => {
   });
 
   test('create()', async () => {
-    const person = makePerson();
+    const person = makePersonData();
 
     const id = await tableGateway.create(person.first_name, person.last_name, person.email);
 
@@ -52,7 +52,7 @@ describe('PersonTableGateway', () => {
   });
 
   test('update()', async () => {
-    const person = await createPerson();
+    const person = await createPersonData();
     const update = {
       id: person.id,
       first_name: faker.name.firstName(),
@@ -73,7 +73,7 @@ describe('PersonTableGateway', () => {
   });
 
   test('delete()', async () => {
-    const person = await createPerson();
+    const person = await createPersonData();
 
     const wasDeleted = await tableGateway.delete(person.id);
 

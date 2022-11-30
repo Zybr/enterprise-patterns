@@ -1,10 +1,16 @@
-import { db } from "../../../database/db";
+import { Database } from "sqlite3"
 import { handlePromiseError } from "../../Utils/utils";
-import Person from "./Person";
+import PersonData from "../Types/PersonData";
 
 export default class PersonTableGateway {
-  public findAll(): Promise<Person[]> {
-    return new Promise((resolve, reject) => db.all(
+  private db: Database;
+
+  public constructor(db: Database) {
+    this.db = db;
+  }
+
+  public findAll(): Promise<PersonData[]> {
+    return new Promise((resolve, reject) => this.db.all(
         'SELECT id, first_name, last_name, email FROM persons',
         (err, rows) => {
           handlePromiseError(reject, err);
@@ -14,8 +20,8 @@ export default class PersonTableGateway {
     );
   }
 
-  public find(id: number): Promise<Person | null> {
-    return new Promise((resolve, reject) => db.get(
+  public find(id: number): Promise<PersonData | null> {
+    return new Promise((resolve, reject) => this.db.get(
       'SELECT id, first_name, last_name, email FROM persons WHERE id = ?',
       [id],
       (err, row) => {
@@ -26,7 +32,7 @@ export default class PersonTableGateway {
   }
 
   public create(firstName: string, lastName: string, email: string): Promise<number> {
-    return new Promise((resolve, reject) => db.run(
+    return new Promise((resolve, reject) => this.db.run(
       'INSERT INTO persons(first_name, last_name, email) VALUES(?, ?, ?)',
       [firstName, lastName, email],
       function(err) {
@@ -37,7 +43,7 @@ export default class PersonTableGateway {
   }
 
   public update(id: number, firstName: string, lastName: string, email: string): Promise<boolean> {
-    return new Promise((resolve, reject) => db.run(
+    return new Promise((resolve, reject) => this.db.run(
       `UPDATE persons
        SET first_name = ?,
            last_name  = ?,
@@ -57,7 +63,7 @@ export default class PersonTableGateway {
   }
 
   public delete(id: number): Promise<boolean> {
-    return new Promise((resolve, reject) => db.run(
+    return new Promise((resolve, reject) => this.db.run(
       `DELETE
        FROM persons
        WHERE id = ?`,

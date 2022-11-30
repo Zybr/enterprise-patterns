@@ -1,0 +1,25 @@
+@startuml
+
+class PersonRowGateway {
+    + {static} findAll (): PersonRowGateway[]
+    + {static} find (id): PersonRowGateway | null
+    + id: int
+    + firstName: string
+    + lastName: string
+    + email: string
+    + create (): void
+    + update (): void
+    + delete (): void
+}
+
+class Person {
+    - PersonRowGateway
+    + getId(): int
+    + getFirstName(): string
+    + getLastName(): string
+    + getEmail(): string
+}
+
+Person o-->PersonRowGateway
+
+@enduml

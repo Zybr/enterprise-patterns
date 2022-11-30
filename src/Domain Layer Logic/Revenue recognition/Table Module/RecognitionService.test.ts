@@ -1,10 +1,11 @@
 import RecognitionService from "./RecognitionService";
 import { ProductType } from "../Enums/ProductType";
 import { db, initDb } from "../../../../database/db";
-import { createContract, createProduct, getContractMoney, removeProducts } from "../Utils/database";
+import { createContract, createProduct, getContractMoney } from "../Utils/database";
 import ContractEntity from "./Entities/ContractEntity";
-import { handlePromiseError } from "../Utils/utils";
 import { updateRevenueSets } from "../Tests data/updateRevenueSets";
+import { handlePromiseError } from "../../../Utils/utils";
+import { clearTable } from "../../../Utils/database";
 
 const TYPE_SHORT = {
   [ProductType.WORD_PROCESSOR]: 'WP',
@@ -44,7 +45,7 @@ describe('RecognitionService by Table module', () => {
   });
 
   beforeEach(async () => {
-    await removeProducts();
+    await clearTable('products');
   })
 
   describe('updateRevenue()', () => {

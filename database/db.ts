@@ -5,8 +5,11 @@ const db = new Database(__dirname + '/db.sqlite');
 
 const initDb = () => {
   const createSchemasSql = fs.readFileSync(__dirname + '/sql/create_schemas.sql');
-  const result = db.exec(createSchemasSql.toString());
-  console.log(result);
+  db.exec(createSchemasSql.toString(), (err) => {
+    if (err) {
+      console.error(err)
+    }
+  });
 }
 
 export {

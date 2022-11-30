@@ -1,8 +1,9 @@
 import RecognitionService from "./RecognitionService";
 import { ProductType } from "../Enums/ProductType";
 import { initDb } from "../../../../database/db";
-import { createContract, createProduct, getContractMoney, removeProducts } from "../Utils/database";
+import { createContract, createProduct, getContractMoney } from "../Utils/database";
 import { updateRevenueSets } from "../Tests data/updateRevenueSets";
+import { clearTable } from "../../../Utils/database";
 
 const TYPE_SHORT = {
   [ProductType.WORD_PROCESSOR]: 'WP',
@@ -20,7 +21,7 @@ describe('RecognitionService by Transaction script', () => {
   });
 
   beforeEach(async () => {
-    await removeProducts();
+    await clearTable('products')
   })
 
   describe('updateRevenue()', () => {

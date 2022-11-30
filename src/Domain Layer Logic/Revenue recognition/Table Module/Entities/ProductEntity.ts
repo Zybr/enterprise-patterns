@@ -2,7 +2,7 @@ import IdMixin from "./Mixins/IdMixin";
 import { ProductType } from "../../Enums/ProductType";
 import Entity from "./Entity";
 import { db } from "../../../../../database/db";
-import { dateToDatabase, handlePromiseError } from "../../Utils/utils";
+import { dateToDatabase, handlePromiseError } from "../../../../Utils/utils";
 
 export default class ProductEntity extends IdMixin(Entity) {
   private readonly contractId: number;

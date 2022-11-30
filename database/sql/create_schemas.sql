@@ -17,3 +17,13 @@ CREATE TABLE products
     price       INTEGER                           NOT NULL,
     FOREIGN KEY (contract_id) references contracts (id)
 );
+
+DROP TABLE IF EXISTS persons;
+
+CREATE TABLE persons
+(
+    id         INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    first_name VARCHAR(255)                      NOT NULL,
+    last_name  VARCHAR(255)                      NOT NULL,
+    email      VARCHAR(255)                      NOT NULL
+);

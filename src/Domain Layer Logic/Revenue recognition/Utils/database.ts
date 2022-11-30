@@ -1,5 +1,6 @@
 import { db } from "../../../../database/db";
-import { dateToDatabase, handlePromiseError } from "./utils";
+import { dateToDatabase, handlePromiseError } from "../../../Utils/utils";
+import { insert } from "../../../Utils/database";
 
 export const createContract = () => new Promise<number>(
   (resolve, reject) => db.run(
@@ -12,31 +13,14 @@ export const createContract = () => new Promise<number>(
   )
 );
 
-export const removeProducts = (): Promise<null> => new Promise(
-  (resolve, reject) => db.run(
-    'DELETE FROM products WHERE TRUE',
-    (err) => {
-      handlePromiseError(reject, err);
-      resolve(null);
-    }
-  )
-);
-
-export const createProduct = ({contractId, type, day, price}) => new Promise<number>(
-  (resolve, reject) => db.run(
-    `INSERT INTO products(contract_id, type, start_date, price)
-     VALUES (?, ?, ?, ?)`,
-    [
-      contractId,
-      type,
-      dateToDatabase(makeDate(day)),
-      price,
-    ],
-    function(err) {
-      handlePromiseError(reject, err);
-      resolve(this.lastID);
-    }
-  )
+export const createProduct = ({contractId, type, day, price}) => insert(
+  'products',
+  {
+    contract_id: contractId,
+    start_date: dateToDatabase(makeDate(day)),
+    type,
+    price,
+  }
 );
 
 export const getContractMoney = (id: number): Promise<number> => {

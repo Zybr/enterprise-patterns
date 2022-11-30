@@ -1,6 +1,7 @@
 import { db } from "../../../../database/db";
 import { ProductType } from "../Enums/ProductType";
-import { getPassedDays, handlePromiseError } from "../Utils/utils";
+import { getPassedDays } from "../Utils/utils";
+import { handlePromiseError } from "../../../Utils/utils";
 
 export default class RecognitionService {
   /** Business logic methods */

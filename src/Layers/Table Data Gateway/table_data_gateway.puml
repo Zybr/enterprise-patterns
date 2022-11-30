@@ -1,0 +1,11 @@
+@startuml
+
+class PersonTableGateway {
+    + findAll (): [][]
+    + find (id): [] | null
+    + create (firstName, lastName, email): int
+    + update (id, firstName, lastName, email): void
+    + delete (id): void
+}
+
+@enduml

@@ -2,7 +2,7 @@ import IdMixin from "./Mixins/IdMixin";
 import ProductEntity from "./ProductEntity";
 import { db } from "../../../../../database/db";
 import Entity from "./Entity";
-import { handlePromiseError } from "../../Utils/utils";
+import { handlePromiseError } from "../../../../Utils/utils";
 
 export default class ContractEntity extends IdMixin(Entity) {
   private money: number = 0;

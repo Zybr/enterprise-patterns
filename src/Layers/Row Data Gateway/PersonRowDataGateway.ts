@@ -83,7 +83,7 @@ export class PersonRowDataGateway implements RowDataGateway {
     return this.email;
   }
 
-  create(): Promise<this> {
+  public create(): Promise<this> {
     const self = this;
     return new Promise((resolve, reject) => this.self.db.run(
       'INSERT INTO persons(first_name, last_name, email) VALUES(?, ?, ?)',
@@ -96,7 +96,7 @@ export class PersonRowDataGateway implements RowDataGateway {
     ));
   }
 
-  update(): Promise<this> {
+  public update(): Promise<this> {
     return new Promise((resolve, reject) => this.self.db.run(
       `UPDATE persons
        SET first_name = ?,
@@ -116,7 +116,7 @@ export class PersonRowDataGateway implements RowDataGateway {
     ));
   }
 
-  delete(): Promise<boolean> {
+  public delete(): Promise<boolean> {
     return new Promise((resolve, reject) => this.self.db.run(
       `DELETE
        FROM persons

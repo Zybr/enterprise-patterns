@@ -1,7 +1,7 @@
-import { db } from "../../../../database/db";
 import { ProductType } from "../Enums/ProductType";
 import { getPassedDays } from "../Utils/utils";
 import { handlePromiseError } from "../../../Utils/utils";
+import { commonDbm } from "../../../../database/databases";
 
 export default class RecognitionService {
   /** Business logic methods */
@@ -72,7 +72,7 @@ export default class RecognitionService {
 
   /** Get all contract products */
   private fetchProducts(contractId: number): Promise<[][]> {
-    return new Promise((resolve, reject) => db.all(
+    return new Promise((resolve, reject) => commonDbm.getDb().all(
       "SELECT id, type, start_date, price FROM products where contract_id = ?",
       [contractId],
       (err, rows: [][]) => {
@@ -85,7 +85,7 @@ export default class RecognitionService {
   /** Save current recognition */
   private storeContract(contractId: number, money: number): Promise<boolean> {
     return new Promise(
-      (resolve, reject) => db.run(
+      (resolve, reject) => commonDbm.getDb().run(
         'UPDATE contracts SET money = ? WHERE id = ?',
         [money, contractId],
         function(err) {

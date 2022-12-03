@@ -1,9 +1,8 @@
 import RecognitionService from "./RecognitionService";
 import { ProductType } from "../Enums/ProductType";
-import { initDb } from "../../../../database/db";
 import { createContract, createProduct, getContractMoney } from "../Utils/database";
 import { updateRevenueSets } from "../Tests data/updateRevenueSets";
-import { clearTable } from "../../../Utils/database";
+import { commonDbm } from "../../../../database/databases";
 
 const TYPE_SHORT = {
   [ProductType.WORD_PROCESSOR]: 'WP',
@@ -16,13 +15,11 @@ describe('RecognitionService by Transaction script', () => {
   let contractId: number | null = null;
 
   beforeAll(async () => {
-    initDb();
+    commonDbm.init();
     contractId = await createContract();
   });
 
-  beforeEach(async () => {
-    await clearTable('products')
-  })
+  beforeEach(async () => await commonDbm.clearTable('products'))
 
   describe('updateRevenue()', () => {
     updateRevenueSets

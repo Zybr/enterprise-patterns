@@ -1,8 +1,7 @@
-import { db, initDb } from "../../../database/db";
-import { clearTable } from "../../Utils/database";
 import { createPersonData, makePersonData } from "../Utils/database";
 import PersonData from "../Types/PersonData";
 import PersonActiveRecord from "./PersonActiveRecord";
+import { commonDbm } from "../../../database/databases";
 
 const assertEqualPersons = (personData: PersonData, rowData: PersonActiveRecord): void => {
   expect(rowData.getId()).toEqual(personData.id);
@@ -11,14 +10,12 @@ const assertEqualPersons = (personData: PersonData, rowData: PersonActiveRecord)
   expect(rowData.getEmail()).toEqual(personData.email);
 }
 
-PersonActiveRecord.setDb(db);
+PersonActiveRecord.setDb(commonDbm.getDb());
 
 describe('PersonRwoDataGateway', () => {
-  beforeAll(initDb);
+  beforeAll(() => commonDbm.init());
 
-  beforeEach(async () => {
-    await clearTable('persons');
-  });
+  beforeEach(async () => await commonDbm.clearTable('persons'));
 
   test('findAll()', async () => {
     const dataA = await createPersonData();
@@ -43,7 +40,7 @@ describe('PersonRwoDataGateway', () => {
   test('create()', async () => {
     const data = makePersonData();
 
-    const createdPerson = await (new PersonActiveRecord(db))
+    const createdPerson = await (new PersonActiveRecord(commonDbm.getDb()))
       .setFirstName(data.first_name)
       .setLastName(data.last_name)
       .setEmail(data.email)
@@ -58,7 +55,7 @@ describe('PersonRwoDataGateway', () => {
     const dataA = await createPersonData();
     const dataB = await createPersonData();
 
-    const updatedPerson = await (new PersonActiveRecord(db))
+    const updatedPerson = await (new PersonActiveRecord(commonDbm.getDb()))
       .setFirstName(dataA.first_name)
       .setLastName(dataA.last_name)
       .setEmail(dataA.email)
@@ -79,7 +76,7 @@ describe('PersonRwoDataGateway', () => {
 
   test('delete()', async () => {
     const data = await createPersonData();
-    const personRow = await (new PersonActiveRecord(db))
+    const personRow = await (new PersonActiveRecord(commonDbm.getDb()))
       .setFirstName(data.first_name)
       .setLastName(data.last_name)
       .setEmail(data.email)

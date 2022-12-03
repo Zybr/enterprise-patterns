@@ -1,9 +1,8 @@
-import { db } from "../../../../database/db";
 import { dateToDatabase, handlePromiseError } from "../../../Utils/utils";
-import { insert } from "../../../Utils/database";
+import { commonDbm } from "../../../../database/databases";
 
 export const createContract = () => new Promise<number>(
-  (resolve, reject) => db.run(
+  (resolve, reject) => commonDbm.getDb().run(
     `INSERT INTO contracts(money)
      VALUES (0)`,
     function(err) {
@@ -13,7 +12,7 @@ export const createContract = () => new Promise<number>(
   )
 );
 
-export const createProduct = ({contractId, type, day, price}) => insert(
+export const createProduct = ({contractId, type, day, price}) => commonDbm.insert(
   'products',
   {
     contract_id: contractId,
@@ -24,7 +23,7 @@ export const createProduct = ({contractId, type, day, price}) => insert(
 );
 
 export const getContractMoney = (id: number): Promise<number> => {
-  return new Promise((resolve, reject) => db.get(
+  return new Promise((resolve, reject) => commonDbm.getDb().get(
     'SELECT money FROM contracts WHERE id = ?',
     [id],
     (err, row) => {

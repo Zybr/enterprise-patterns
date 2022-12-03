@@ -1,6 +1,6 @@
-import { insert } from "../../Utils/database";
 import { faker } from '@faker-js/faker';
 import PersonData from "../Types/PersonData";
+import { commonDbm } from "../../../database/databases";
 
 export const makePersonData = (): PersonData => {
   return {
@@ -14,7 +14,7 @@ export const createPersonData = (): Promise<PersonData> => {
   const person = makePersonData();
 
   return new Promise<PersonData>((resolve) =>
-    insert('persons', person)
+    commonDbm.insert('persons', person)
       .then((id) => resolve(Object.assign(person, {id})))
   );
 }

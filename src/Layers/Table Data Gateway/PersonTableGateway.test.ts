@@ -1,9 +1,8 @@
-import { db, initDb } from "../../../database/db";
-import { clearTable, selectById } from "../../Utils/database";
 import { createPersonData, makePersonData } from "../Utils/database";
 import PersonTableGateway from "./PersonTableGateway";
 import { faker } from '@faker-js/faker';
 import PersonData from "../Types/PersonData";
+import { commonDbm } from "../../../database/databases";
 
 const assertEqualPersons = (personA: PersonData, personB: PersonData): void => {
   expect(personA.id).toEqual(personB.id);
@@ -12,13 +11,13 @@ const assertEqualPersons = (personA: PersonData, personB: PersonData): void => {
   expect(personA.email).toEqual(personB.email);
 }
 
-const tableGateway = new PersonTableGateway(db);
+const tableGateway = new PersonTableGateway(commonDbm.getDb());
 
 describe('PersonTableGateway', () => {
-  beforeAll(initDb);
+  beforeAll(() => commonDbm.init());
 
   beforeEach(async () => {
-    await clearTable('persons');
+    await commonDbm.clearTable('persons');
   })
 
   test('findAll()', async () => {
@@ -78,7 +77,7 @@ describe('PersonTableGateway', () => {
     const wasDeleted = await tableGateway.delete(person.id);
 
     expect(wasDeleted).toBeTruthy();
-    const personDeleted = await selectById('persons', person.id);
+    const personDeleted = await commonDbm.selectById('persons', person.id);
     expect(personDeleted).toBeNull()
   });
 });

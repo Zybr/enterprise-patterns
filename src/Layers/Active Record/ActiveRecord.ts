@@ -89,9 +89,10 @@ export default abstract class ActiveRecord {
   }
 
   public delete(): Promise<boolean> {
+    const table = this.getTableName();
     return new Promise((resolve, reject) => this.db.run(
       `DELETE
-       FROM persons
+       FROM ${table}
        WHERE id = ?`,
       [this.id],
       function(err) {

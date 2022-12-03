@@ -1,3 +1,4 @@
-import { initDb } from "./db";
+import { commonDbm, personEmailDbm } from "./databases";
 
-initDb();
+commonDbm.init();
+personEmailDbm.init();

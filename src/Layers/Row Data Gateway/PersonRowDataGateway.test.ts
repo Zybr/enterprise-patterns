@@ -1,8 +1,7 @@
 import { PersonRowDataGateway } from "./PersonRowDataGateway";
-import { db, initDb } from "../../../database/db";
-import { clearTable } from "../../Utils/database";
 import { createPersonData, makePersonData } from "../Utils/database";
 import PersonData from "../Types/PersonData";
+import { commonDbm } from "../../../database/databases";
 
 const assertEqualPersons = (personData: PersonData, rowData: PersonRowDataGateway): void => {
   expect(rowData.getId()).toEqual(personData.id);
@@ -11,13 +10,13 @@ const assertEqualPersons = (personData: PersonData, rowData: PersonRowDataGatewa
   expect(rowData.getEmail()).toEqual(personData.email);
 }
 
-PersonRowDataGateway.setDb(db);
+PersonRowDataGateway.setDb(commonDbm.getDb());
 
 describe('PersonRwoDataGateway', () => {
-  beforeAll(initDb);
+  beforeAll(() => commonDbm.init());
 
   beforeEach(async () => {
-    await clearTable('persons');
+    await commonDbm.clearTable('persons');
   });
 
   test('findAll()', async () => {

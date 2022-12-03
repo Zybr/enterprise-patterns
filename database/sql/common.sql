@@ -15,7 +15,7 @@ CREATE TABLE products
     type        VARCHAR(255)                      NOT NULL,
     start_date  DATE                              NOT NULL,
     price       INTEGER                           NOT NULL,
-    FOREIGN KEY (contract_id) references contracts (id)
+    FOREIGN KEY (contract_id) REFERENCES contracts (id)
 );
 
 DROP TABLE IF EXISTS persons;

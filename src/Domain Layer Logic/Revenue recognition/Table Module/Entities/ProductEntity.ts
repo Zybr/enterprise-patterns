@@ -1,8 +1,8 @@
 import IdMixin from "./Mixins/IdMixin";
 import { ProductType } from "../../Enums/ProductType";
 import Entity from "./Entity";
-import { db } from "../../../../../database/db";
 import { dateToDatabase, handlePromiseError } from "../../../../Utils/utils";
+import { commonDbm } from "../../../../../database/databases";
 
 export default class ProductEntity extends IdMixin(Entity) {
   private readonly contractId: number;
@@ -22,7 +22,7 @@ export default class ProductEntity extends IdMixin(Entity) {
 
     return this.isNew()
       ? new Promise<this>(
-        (resolve, reject) => db.run(
+        (resolve, reject) => commonDbm.getDb().run(
           `INSERT INTO products(contract_id, type, start_date, price)
            VALUES (?, ?, ?, ?)`,
           [
@@ -39,7 +39,7 @@ export default class ProductEntity extends IdMixin(Entity) {
         )
       )
       : new Promise<this>(
-        (resolve, reject) => db.run(
+        (resolve, reject) => commonDbm.getDb().run(
           `UPDATE contracts
            SET money = ?
            WHERE id = ?`,

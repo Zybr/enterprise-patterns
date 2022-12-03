@@ -1,8 +1,8 @@
 import IdMixin from "./Mixins/IdMixin";
 import ProductEntity from "./ProductEntity";
-import { db } from "../../../../../database/db";
 import Entity from "./Entity";
 import { handlePromiseError } from "../../../../Utils/utils";
+import { commonDbm } from "../../../../../database/databases";
 
 export default class ContractEntity extends IdMixin(Entity) {
   private money: number = 0;
@@ -12,7 +12,7 @@ export default class ContractEntity extends IdMixin(Entity) {
 
     return this.isNew()
       ? new Promise<this>(
-        (resolve, reject) => db.run(
+        (resolve, reject) => commonDbm.getDb().run(
           `INSERT INTO contracts(money)
            VALUES (0)`,
           function(err) {
@@ -23,7 +23,7 @@ export default class ContractEntity extends IdMixin(Entity) {
         )
       )
       : new Promise<this>(
-        (resolve, reject) => db.run(
+        (resolve, reject) => commonDbm.getDb().run(
           `UPDATE contracts
            SET money = ?
            WHERE id = ?`,
@@ -37,7 +37,7 @@ export default class ContractEntity extends IdMixin(Entity) {
   }
 
   public getProducts(): Promise<ProductEntity[]> {
-    return new Promise((resolve, reject) => db.all(
+    return new Promise((resolve, reject) => commonDbm.getDb().all(
       "SELECT id, type, start_date, price FROM products",
       (err, rows: [][]) => {
         handlePromiseError(reject, err);

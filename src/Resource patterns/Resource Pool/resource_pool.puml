@@ -1,0 +1,21 @@
+@startuml
+
+class DbPool {
+    + getDb(): DbResource
+    + releaseDb(resource): void
+}
+
+interface DbResource {
+}
+
+class PolledResource {
+    + ...()
+    + close(): void
+}
+
+DbResource <|..PolledResource
+DbPool ..> DbResource
+
+note bottom of PolledResource: "close() -> DbPool.releaseDb(resource)";
+
+@enduml

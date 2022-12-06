@@ -13,7 +13,7 @@ class DbManager {
 
   public constructor(name: string) {
     this.name = name;
-    this.database = new Database(this.SCHEMA_DIR + this.name + '.sqlite');
+    this.database = new Database(this.getDbPath());
   }
 
   public init() {
@@ -29,6 +29,10 @@ class DbManager {
 
   public getDb(): Database {
     return this.database;
+  }
+
+  public getDbPath(): string {
+    return this.SCHEMA_DIR + this.name + '.sqlite';
   }
 
   public clearTable = (table: string): Promise<null> => new Promise(

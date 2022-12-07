@@ -11,10 +11,10 @@ DROP TABLE IF EXISTS products;
 CREATE TABLE products
 (
     id          INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    contract_id INTEGER                           NOT NULL,
-    type        VARCHAR(255)                      NOT NULL,
-    start_date  DATE                              NOT NULL,
-    price       INTEGER                           NOT NULL,
+    contract_id INTEGER      NOT NULL,
+    type        VARCHAR(255) NOT NULL,
+    start_date  DATE         NOT NULL,
+    price       INTEGER      NOT NULL,
     FOREIGN KEY (contract_id) REFERENCES contracts (id)
 );
 
@@ -23,7 +23,8 @@ DROP TABLE IF EXISTS persons;
 CREATE TABLE persons
 (
     id         INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    first_name VARCHAR(255)                      NOT NULL,
-    last_name  VARCHAR(255)                      NOT NULL,
-    email      VARCHAR(255)                      NOT NULL
+    first_name VARCHAR(255) NOT NULL,
+    last_name  VARCHAR(255) NOT NULL,
+    year       INTEGER NULL,
+    email      VARCHAR(255) NOT NULL
 );

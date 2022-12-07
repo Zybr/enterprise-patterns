@@ -1,4 +1,5 @@
 import IPersonSelectCriteria from "./criteria/IPersonSelectCriteria";
+import { camelCaseToUnderscore } from "../../../utils/utils";
 
 export default class PersonSelectionFactory {
   public newSelection(criteria: IPersonSelectCriteria): string {
@@ -11,7 +12,7 @@ export default class PersonSelectionFactory {
   }
 
   private makeCondition(criteria: IPersonSelectCriteria, attr: string): string | null {
-    const field = this.camelCaseToUnderscore(attr);
+    const field = camelCaseToUnderscore(attr);
 
     if (criteria[attr] === undefined || criteria[attr] === null) {
       return null;
@@ -22,9 +23,5 @@ export default class PersonSelectionFactory {
     }
 
     return `${field} = ${typeof criteria[attr] === 'string' ? `"${criteria[attr]}"` : criteria[attr]}`;
-  }
-
-  private camelCaseToUnderscore(attr: string): string {
-    return attr.split(/\.?(?=[A-Z])/).join('_').toLowerCase();
   }
 }

@@ -5,7 +5,7 @@ import * as fs from 'fs';
 /**
  * Util for communication with databases on low level
  */
-class DbManager {
+export class DbManager {
   private readonly DB_DIR = __dirname + '/sql/';
   private readonly SCHEMA_DIR = __dirname + '/db/';
   private readonly name: string;

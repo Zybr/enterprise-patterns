@@ -1,6 +1,6 @@
 import IResource from "./IResource";
 import ResourcePool from "./ResourcePool";
-import ResourceTimer from "./ResourceTimer";
+import ResourceTimer from "./Resource Timer/ResourceTimer";
 
 export default class PulledResource implements IResource {
   private readonly pool: ResourcePool;

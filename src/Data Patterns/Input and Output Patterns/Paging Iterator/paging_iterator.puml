@@ -1,0 +1,47 @@
+@startuml
+
+class Model {
+
+}
+
+class Page {
+    + constructor (models: [])
+    + size (): int
+    + get (index): Model | null
+}
+
+class DomainFactory {
+    + newModel(row: []): Model
+}
+
+class Database {
+    + all(sql, ...): [][]
+}
+
+class PagingIterator {
+    - Database
+    - DomainFactory
+    - size
+    - start
+    + setSize (size)
+    + next (): Page | null
+}
+
+note right of PagingIterator
+rows = Database.all(
+    SELECT ... FROM ... LIMIT {size} OFFSET {start}
+)
+models = rows.map(
+    row => DomainFactory::newModel(row)
+)
+start += size
+end note
+
+PagingIterator "1" --> "*" Page
+PagingIterator *--> DomainFactory
+PagingIterator o--> Database
+
+Page "1" o--> "*" Model
+
+
+@enduml

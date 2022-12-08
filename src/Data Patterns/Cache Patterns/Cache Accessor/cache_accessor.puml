@@ -1,0 +1,20 @@
+@startuml
+
+interface IDatabase {
+    + getData(): []
+}
+
+class Database {
+    + getData(): []
+}
+
+class DatabaseCache {
+    + getData(): []
+}
+
+IDatabase <.. Database
+IDatabase <.. DatabaseCache
+
+DatabaseCache o--> Database
+
+@enduml

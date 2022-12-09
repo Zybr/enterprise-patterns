@@ -1,8 +1,8 @@
-import Row from "./Cache Accessor/Row";
+import Row from "./Row";
 import { IDatabase } from "./IDatabase";
 
 export default class Database implements IDatabase {
-  public getRow(): Row {
+  public getRow(inx: number): Row {
     return {
       id: Math.round(Math.random() * 100000)
     }

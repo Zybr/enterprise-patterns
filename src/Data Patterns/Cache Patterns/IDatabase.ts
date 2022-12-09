@@ -1,5 +1,5 @@
-import Row from "./Cache Accessor/Row";
+import Row from "./Row";
 
 export interface IDatabase {
-  getRow(): Row
+  getRow(inx: number): Row
 }

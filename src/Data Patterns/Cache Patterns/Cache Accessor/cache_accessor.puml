@@ -8,13 +8,13 @@ class Database {
     + getData(): []
 }
 
-class DatabaseCache {
+class ProxyDatabase {
     + getData(): []
 }
 
 IDatabase <.. Database
-IDatabase <.. DatabaseCache
+IDatabase <.. ProxyDatabase
 
-DatabaseCache o--> Database
+ProxyDatabase o--> Database
 
 @enduml

@@ -1,0 +1,34 @@
+@startuml
+
+interface IDatabase {
+    + getData (inx): []
+}
+
+class Database {
+    + getData (inx): []
+}
+
+class ProxyDatabase {
+    + getData (inx): []
+}
+
+class Cache {
+    + get (key): any | undefined
+    + put (key, value): any
+    + has (key): boolean
+    + remove (key): void
+    + clear (): void
+}
+
+IDatabase <.. Database
+IDatabase <.. ProxyDatabase
+
+ProxyDatabase o-left-> Database
+ProxyDatabase *-right-> Cache
+
+note bottom of ProxyDatabase
+    IF Cache.has(inx)
+    THEN return Cache.get(inx)
+end note
+
+@enduml

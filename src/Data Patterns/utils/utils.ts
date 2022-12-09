@@ -8,3 +8,6 @@ export const makePersonProps = (): PersonPropsSet => ({
   email: faker.internet.email(),
 });
 
+export const pause = async (time: number) => await new Promise(
+  (resolve => setTimeout(() => resolve(null), time))
+);

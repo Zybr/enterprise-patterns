@@ -32,5 +32,7 @@ describe('Retryer', () => {
       [SQL, []],
       [SQL, []],
     ]);
+
+    resource.close();
   });
 });

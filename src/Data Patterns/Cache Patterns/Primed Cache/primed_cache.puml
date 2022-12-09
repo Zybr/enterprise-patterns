@@ -1,0 +1,40 @@
+@startuml
+
+interface IDatabase {
+    + getData (inx): []
+}
+
+class Database {
+    + getData (inx): []
+}
+
+class ProxyDatabase {
+    + getData (inx): []
+}
+
+class Cache {
+    + get (key): any | undefined
+    + put (key, value): any
+    + has (key): boolean
+    + remove (key): void
+    + clear (): void
+}
+
+class PrimedPartialKeysList {
+    + add(key): void
+    + has(key): boolean
+}
+
+IDatabase <.. Database
+IDatabase <.. ProxyDatabase
+
+ProxyDatabase o-left-> Database
+ProxyDatabase *-right-> Cache
+ProxyDatabase *-down-> PrimedPartialKeysList
+
+note bottom of ProxyDatabase
+    IF PrimedPartialKeysList.has(inx) && Cache.has(inx)
+    THEN return Cache.get(inx)
+end note
+
+@enduml

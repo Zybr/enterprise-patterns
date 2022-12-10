@@ -1,0 +1,24 @@
+@startuml
+interface ICache {
+    + get (key): any | undefined
+    + put (key, value): any
+    + has (key): boolean
+    + remove (key): void
+    + clear (): void
+}
+
+class Cache {
+}
+
+class CacheStatistics {
+    - cache
+    + getLastPut(key): int | null
+    + getLastRemove(key): int | null
+}
+
+ICache <|.. Cache
+ICache <|.. CacheStatistics
+
+CacheStatistics o-left-> Cache
+
+@enduml

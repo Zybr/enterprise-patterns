@@ -1,4 +1,4 @@
-import Cache from "./Cache";
+import Cache from "./TimedCache/Cache";
 
 export default class CacheCollector {
   public constructor(

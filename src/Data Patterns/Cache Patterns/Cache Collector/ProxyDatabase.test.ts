@@ -1,6 +1,6 @@
 import Database from "../Database";
 import ProxyDatabase from "./ProxyDatabase";
-import Cache from "./Cache";
+import Cache from "./TimedCache/Cache";
 import { pause } from "../../utils/utils";
 
 describe('ProxyDatabase', () => {
@@ -27,7 +27,7 @@ describe('ProxyDatabase', () => {
     const val = database.getRow(inx).id;
 
     expect(database.getRow(inx).id).toEqual(val);
-    await pause(250);
+    await pause(500);
     expect(database.getRow(inx).id).not.toEqual(val);
   });
 });

@@ -1,7 +1,7 @@
 import { IDatabase } from "../IDatabase";
 import Database from "../Database";
 import Row from "../Row";
-import Cache from "./Cache";
+import Cache from "./TimedCache/Cache";
 import CacheCollector from "./CacheCollector";
 import Timer from "../../utils/Timer";
 

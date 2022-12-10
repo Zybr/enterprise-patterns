@@ -14,6 +14,8 @@ describe('Retryer', () => {
     const row = await retryer.selectOne(SQL, []);
 
     expect(row['count']).not.toBeUndefined();
+
+    resource.close();
   });
 
   test('selectOne() - fail', async () => {

@@ -1,7 +1,7 @@
 import { IDatabase } from "../IDatabase";
 import Database from "../Database";
 import Row from "../Row";
-import Cache from "./Cache";
+import Cache from "../Cache/Cache";
 
 export default class ProxyDatabase implements IDatabase {
   private database: Database;

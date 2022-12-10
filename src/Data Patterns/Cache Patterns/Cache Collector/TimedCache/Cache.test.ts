@@ -1,6 +1,6 @@
 import Cache from "./Cache";
 import { faker } from '@faker-js/faker';
-import { pause } from "../../utils/utils";
+import { pause } from "../../../utils/utils";
 
 describe('Cache', () => {
   let cache: Cache;

@@ -1,12 +1,14 @@
-export default class Cache {
+import ICache from "./ICache";
+
+export default class Cache implements ICache {
   private container: { [key: string]: any } = {}
 
   public get(key: string): any | undefined {
     return this.container[key] ?? undefined;
   }
 
-  public put(key: string, data: any): any {
-    return this.container[key] = data;
+  public put(key: string, value: any): any {
+    return this.container[key] = value;
   }
 
   public has(key: string): boolean {

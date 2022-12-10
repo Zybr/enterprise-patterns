@@ -1,7 +1,7 @@
 import { IDatabase } from "../IDatabase";
 import Database from "../Database";
 import Row from "../Row";
-import Cache from "../Demand Cache/Cache";
+import Cache from "../Cache/Cache";
 import PartialKeysList from "./PartialKeysList";
 
 export default class ProxyDatabase implements IDatabase {

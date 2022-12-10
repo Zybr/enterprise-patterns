@@ -1,4 +1,4 @@
-import Cache from "./Cache";
+import Cache from "./TimedCache/Cache";
 import CacheCollector from "./CacheCollector";
 import { pause } from "../../utils/utils";
 

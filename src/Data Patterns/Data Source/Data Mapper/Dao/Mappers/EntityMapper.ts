@@ -1,7 +1,7 @@
-import Entity from "../Entities/Entity";
 import PropsSet from "../Entities/PropsSet";
+import { IEntity } from "../Entities/IEntity";
 
-export default abstract class EntityMapper<E extends Entity | PropsSet, P extends PropsSet> {
+export default abstract class EntityMapper<E extends IEntity | PropsSet, P extends PropsSet> {
   public abstract mapEntity(entity: E, propsSet: P): E
 
   public abstract makePropsSet(entity: E): P

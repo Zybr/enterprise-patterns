@@ -16,16 +16,15 @@ export class DbManager {
     this.database = new Database(this.getDbPath());
   }
 
-  public init() {
-    this.getDb().exec(
+  public init = (): Promise<null> => new Promise(
+    (resolve, reject) => this.database.exec(
       fs.readFileSync(this.DB_DIR + this.name + '.sql').toString(),
       (err) => {
-        if (err) {
-          console.error(err)
-        }
+        handlePromiseError(reject, err)
+        resolve(null);
       }
-    );
-  }
+    )
+  )
 
   public getDb(): Database {
     return this.database;

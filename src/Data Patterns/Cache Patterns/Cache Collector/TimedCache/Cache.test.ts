@@ -64,7 +64,7 @@ describe('Cache', () => {
 
     cache.put(keyB, 1);
 
-    await pause(100)
+    await pause(200)
     expect(cache.lastUse(keyB)).toEqual(timeB);
   });
 });

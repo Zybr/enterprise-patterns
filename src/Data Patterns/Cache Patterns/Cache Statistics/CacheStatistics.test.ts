@@ -27,7 +27,7 @@ describe('CacheStatistics', () => {
     cache.remove(key)
     pause(100)
     cache.remove(key)
-    pause(100)
+    pause(200)
     expect(cache.getLastPut(key)).toEqual(putTime);
     expect(cache.getLastRemove(key)).toEqual(removeTime);
 

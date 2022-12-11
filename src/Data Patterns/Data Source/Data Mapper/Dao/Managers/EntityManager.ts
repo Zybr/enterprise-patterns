@@ -1,10 +1,10 @@
-import Entity from "../Entities/Entity";
 import PropsSet from "../Entities/PropsSet";
 import { Database } from "sqlite3"
 import { handlePromiseError } from "../../../../../utils/utils";
 import EntityMapper from "../Mappers/EntityMapper";
+import { IEntity } from "../Entities/IEntity";
 
-export default abstract class EntityManager<E extends (Entity | PropsSet), P extends PropsSet> {
+export default abstract class EntityManager<E extends (IEntity | PropsSet), P extends PropsSet> {
   public readonly db: Database
   public readonly mapper: EntityMapper<E, P>
 

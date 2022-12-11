@@ -2,10 +2,10 @@
 export const dateToDatabase = (date: Date): string => `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 
 interface callable {
-  (...any): any
+  (...args: any[]): any
 }
 
-export const handlePromiseError = (reject: callable, err?: Error) => {
+export const handlePromiseError = (reject: callable, err?: Error | null) => {
   if (err) {
     reject(err);
   }

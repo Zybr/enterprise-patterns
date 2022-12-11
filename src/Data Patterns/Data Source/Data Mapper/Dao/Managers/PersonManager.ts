@@ -1,12 +1,13 @@
 import EntityManager from "./EntityManager";
-import Person from "../../Domain/Models/Person";
 import { Database } from "sqlite3"
 import EmailManager from "./EmailManager";
 import PersonPropsSet from "../Entities/PersonPropsSet";
 import EmailPropsSet from "../Entities/EmailPropsSet";
 import PersonMapper from "../Mappers/PersonMapper";
+import IPerson from "../../Domain/Models/IPerson";
+import Person from "../../Domain/Models/Person";
 
-export default class PersonManager extends EntityManager<Person, PersonPropsSet> {
+export default class PersonManager extends EntityManager<IPerson, PersonPropsSet> {
   private readonly emailManager: EmailManager;
 
   public constructor(db: Database, mapper: PersonMapper, emailMng: EmailManager) {
@@ -14,11 +15,11 @@ export default class PersonManager extends EntityManager<Person, PersonPropsSet>
     this.emailManager = emailMng;
   }
 
-  protected makeEntity(): Person {
+  protected makeEntity(): IPerson {
     return new Person();
   }
 
-  protected mapEntity(person: Person, propsSet: PersonPropsSet): Promise<Person> {
+  protected mapEntity(person: IPerson, propsSet: PersonPropsSet): Promise<IPerson> {
     return super
       .mapEntity(person, propsSet)
       .then(person => this.selectEmail(person))
@@ -27,7 +28,7 @@ export default class PersonManager extends EntityManager<Person, PersonPropsSet>
       })
   }
 
-  public save(person: Person): Promise<Person> {
+  public save(person: IPerson): Promise<IPerson> {
     return this
       .saveEmail(person)
       .then(email => this.emailManager
@@ -38,19 +39,22 @@ export default class PersonManager extends EntityManager<Person, PersonPropsSet>
           }
         )
       )
-      .then(email => this.create(
-          Object.assign(
+      .then(email => {
+          const propsSet = Object.assign(
             this.mapper.makePropsSet(person),
             {
               email_id: email.id,
             },
-          )
-        )
+          );
+          return (person.id === null)
+            ? this.create(propsSet)
+            : this.update(propsSet)
+        }
       )
       .then(propsSet => this.mapper.mapEntity(person, propsSet))
   }
 
-  public delete(person: Person): Promise<boolean> {
+  public delete(person: IPerson): Promise<boolean> {
     if (person.id === null) {
       return Promise.resolve(false);
     }
@@ -67,7 +71,7 @@ export default class PersonManager extends EntityManager<Person, PersonPropsSet>
       .then(() => super.delete(person))
   }
 
-  private saveEmail(person: Person): Promise<EmailPropsSet> {
+  private saveEmail(person: IPerson): Promise<EmailPropsSet> {
     if (person.id === null) { // Create new email
       return this.emailManager.save({
         id: null,
@@ -82,7 +86,7 @@ export default class PersonManager extends EntityManager<Person, PersonPropsSet>
     }
   }
 
-  private selectEmail(person: Person): Promise<EmailPropsSet | null> {
+  private selectEmail(person: IPerson): Promise<EmailPropsSet | null> {
     if (person.id === null) {
       return Promise.resolve(null);
     }

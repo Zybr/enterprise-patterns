@@ -40,14 +40,12 @@ describe('RecognitionService by Table module', () => {
   let contract: ContractEntity;
 
   beforeAll(async () => {
-    commonDbm.init();
+    await commonDbm.init();
     const contractId = await createContract();
     contract = await getContractById(contractId);
   });
 
-  beforeEach(async () => {
-    await commonDbm.clearTable('products');
-  })
+  beforeEach(async () => await commonDbm.clearTable('products'));
 
   describe('updateRevenue()', () => {
     updateRevenueSets

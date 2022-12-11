@@ -13,7 +13,7 @@ const assertEqualPersons = (personData: PersonData, rowData: PersonActiveRecord)
 PersonActiveRecord.setDb(commonDbm.getDb());
 
 describe('PersonRwoDataGateway', () => {
-  beforeAll(() => commonDbm.init());
+  beforeAll(async () => await commonDbm.init());
 
   beforeEach(async () => await commonDbm.clearTable('persons'));
 

@@ -1,28 +1,21 @@
 import ManagerFactory from "../ManagerFactory";
 import { personEmailDbm } from "../../../../../../database/databases";
-import { faker } from '@faker-js/faker';
 import Person from "../../Domain/Models/Person";
 import PropsSet from "../Entities/PropsSet";
 import PersonManager from "./PersonManager";
+import { makePersonFields } from "../../utils/utils";
+import IPerson from "../../Domain/Models/IPerson";
 
-const assertEqualsPersons = (expected: PropsSet, actual: Person): void => {
+const assertEqualsPersons = (expected: PropsSet, actual: IPerson): void => {
   expect(expected.id).toEqual(actual.id);
   expect(expected.first_name).toEqual(actual.getFirstName());
   expect(expected.last_name).toEqual(actual.getLastName());
   // expect(expected.email).toEqual(actual.getEmail()); Random behaviour
 }
 
-const makePerson = (): PropsSet => {
-  return {
-    id: null,
-    first_name: faker.name.firstName(),
-    last_name: faker.name.lastName(),
-    email: faker.internet.email(),
-  }
-};
 
 const createPerson = async (): Promise<PropsSet> => {
-  const props = await makePerson();
+  const props = makePersonFields();
   const emailId = await personEmailDbm.insert('emails', {
     mail: props.email,
   });
@@ -41,11 +34,11 @@ describe('PersonManager', () => {
   const personManager = factory.makeManager(Person.name) as PersonManager;
   const emailManager = factory.makeEmailManager();
 
-  beforeAll(() => personEmailDbm.init())
+  beforeAll(async () => await personEmailDbm.init())
 
-  beforeEach(() => {
-    personEmailDbm.clearTable('persons');
-    personEmailDbm.clearTable('emails');
+  beforeEach(async () => {
+    await personEmailDbm.clearTable('persons');
+    await personEmailDbm.clearTable('emails');
   })
 
   test('find()', async () => {
@@ -70,7 +63,7 @@ describe('PersonManager', () => {
   });
 
   test('save()', async () => {
-    const set = await makePerson();
+    const set = makePersonFields();
 
     const person = await personManager.save(
       (new Person())

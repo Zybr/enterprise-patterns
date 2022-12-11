@@ -1,6 +1,7 @@
 import Entity from "../../Dao/Entities/Entity";
+import IPerson from "./IPerson";
 
-export default class Person extends Entity {
+export default class Person extends Entity implements IPerson {
   private firstName: string = '';
   private lastName: string = '';
   private email: string = '';

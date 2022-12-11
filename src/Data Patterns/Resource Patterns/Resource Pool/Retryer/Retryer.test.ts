@@ -6,7 +6,7 @@ const pool = new ResourcePool(10, commonDbm.getDbPath());
 const SQL = "SELECT COUNT(*) as count FROM persons";
 
 describe('Retryer', () => {
-  beforeAll(async () => commonDbm.init());
+  beforeAll(async () => await commonDbm.init());
 
   test('selectOne() - success', async () => {
     const resource = pool.getResource();

@@ -6,7 +6,7 @@ const DB_PATH = commonDbm.getDbPath();
 const SQL = "SELECT COUNT(*) as count FROM products"
 
 describe('DbPool', () => {
-  beforeAll(async () => commonDbm.init());
+  beforeAll(async () => await commonDbm.init());
 
   test('Get a resource', async () => {
     const pool = new ResourcePool(3, DB_PATH);

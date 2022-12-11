@@ -2,12 +2,12 @@ import EntityManager from "./Managers/EntityManager";
 import Person from "../Domain/Models/Person";
 import PersonManager from "./Managers/PersonManager";
 import { personEmailDbm } from "../../../../../database/databases";
-import Entity from "./Entities/Entity";
 import EmailManager from "./Managers/EmailManager";
 import { Database } from "sqlite3"
 import PropsSet from "./Entities/PropsSet";
 import PersonMapper from "./Mappers/PersonMapper";
 import EmailMapper from "./Mappers/EmailMapper";
+import { IEntity } from "./Entities/IEntity";
 
 export default class ManagerFactory {
   private readonly db: Database;
@@ -16,7 +16,7 @@ export default class ManagerFactory {
     this.db = db;
   }
 
-  public makeManager(type: string): EntityManager<Entity, PropsSet> {
+  public makeManager(type: string): EntityManager<IEntity, PropsSet> {
     switch (type) {
       case Person.name:
         return new PersonManager(this.db, new PersonMapper(), this.makeEmailManager());

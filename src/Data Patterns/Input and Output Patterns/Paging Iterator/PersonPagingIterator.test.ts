@@ -37,7 +37,7 @@ const createPersons = (count: number) => {
 describe('PersonPagingIterator', () => {
   const iterator = new PersonPagingIterator(commonDbm.getDb());
 
-  beforeEach(() => commonDbm.clearTable('persons'));
+  beforeEach(async () => await commonDbm.clearTable('persons'));
 
   test('getNext()', async () => {
     const maxPageSize = 5;

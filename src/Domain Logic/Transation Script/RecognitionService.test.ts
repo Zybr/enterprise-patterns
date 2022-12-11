@@ -15,7 +15,7 @@ describe('RecognitionService by Transaction script', () => {
   let contractId: number | null = null;
 
   beforeAll(async () => {
-    commonDbm.init();
+    await commonDbm.init();
     contractId = await createContract();
   });
 

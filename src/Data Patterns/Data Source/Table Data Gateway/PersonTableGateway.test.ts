@@ -14,11 +14,9 @@ const assertEqualPersons = (personA: PersonData, personB: PersonData): void => {
 const tableGateway = new PersonTableGateway(commonDbm.getDb());
 
 describe('PersonTableGateway', () => {
-  beforeAll(() => commonDbm.init());
+  beforeAll(async () => await commonDbm.init());
 
-  beforeEach(async () => {
-    await commonDbm.clearTable('persons');
-  })
+  beforeEach(async () => await commonDbm.clearTable('persons'));
 
   test('findAll()', async () => {
     const personA = await createPersonData();

@@ -13,6 +13,7 @@ describe('PersonUow', () => {
     [Person.name]: personManager
   });
 
+  beforeEach(async () => await personEmailDbm.init());
 
   test('create', async () => {
     const model = fillPerson(new PersonUow(uow, new Person()));

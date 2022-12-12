@@ -1,4 +1,4 @@
-import { Database } from "sqlite3"
+import { Database } from "sqlite3";
 import { handlePromiseError } from "../../../utils/utils";
 import RowDataGateway from "./RowDataGateway";
 

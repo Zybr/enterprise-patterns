@@ -1,5 +1,5 @@
 import ActiveRecord from "./ActiveRecord";
-import { Database } from "sqlite3"
+import { Database } from "sqlite3";
 import { handlePromiseError } from "../../../utils/utils";
 
 export default class PersonActiveRecord extends ActiveRecord {

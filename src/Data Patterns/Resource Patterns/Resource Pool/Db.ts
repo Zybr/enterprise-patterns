@@ -1,5 +1,5 @@
 import { handlePromiseError } from "../../../utils/utils";
-import { Database } from "sqlite3"
+import { Database } from "sqlite3";
 import IResource from "./IResource";
 
 export default class Db implements IResource {

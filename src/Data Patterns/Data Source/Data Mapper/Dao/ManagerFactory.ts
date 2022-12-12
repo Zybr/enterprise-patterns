@@ -3,7 +3,7 @@ import Person from "../Domain/Models/Person";
 import PersonManager from "./Managers/PersonManager";
 import { personEmailDbm } from "../../../../../database/databases";
 import EmailManager from "./Managers/EmailManager";
-import { Database } from "sqlite3"
+import { Database } from "sqlite3";
 import PropsSet from "./Entities/PropsSet";
 import PersonMapper from "./Mappers/PersonMapper";
 import EmailMapper from "./Mappers/EmailMapper";

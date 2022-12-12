@@ -1,6 +1,6 @@
 import IResource from "./IResource";
 import PulledResource from "./PulledResource";
-import { Database } from "sqlite3"
+import { Database } from "sqlite3";
 import Db from "./Db";
 
 export default class ResourcePool {

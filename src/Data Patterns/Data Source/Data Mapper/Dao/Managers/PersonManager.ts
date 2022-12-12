@@ -1,5 +1,5 @@
 import EntityManager from "./EntityManager";
-import { Database } from "sqlite3"
+import { Database } from "sqlite3";
 import EmailManager from "./EmailManager";
 import PersonPropsSet from "../Entities/PersonPropsSet";
 import EmailPropsSet from "../Entities/EmailPropsSet";

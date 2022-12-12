@@ -1,5 +1,5 @@
 import { handlePromiseError } from "../src/utils/utils";
-import { Database } from "sqlite3"
+import { Database } from "sqlite3";
 import * as fs from 'fs';
 
 /**

@@ -1,5 +1,5 @@
 import PropsSet from "../Entities/PropsSet";
-import { Database } from "sqlite3"
+import { Database } from "sqlite3";
 import { handlePromiseError } from "../../../../../utils/utils";
 import EntityMapper from "../Mappers/EntityMapper";
 import { IEntity } from "../Entities/IEntity";

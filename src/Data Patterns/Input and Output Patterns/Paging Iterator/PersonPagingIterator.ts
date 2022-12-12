@@ -1,4 +1,4 @@
-import { Database } from "sqlite3"
+import { Database } from "sqlite3";
 import PersonObjectFactory from "../Domain Object Factory/PersonObjectFactory";
 import Page from "./Page";
 import Person from "../models/Person";

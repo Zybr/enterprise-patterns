@@ -5,17 +5,19 @@ import { dateToDbString, dbStringToDate } from "../../../utils/utils";
 import TimeInterval from "../../../Introduction/Decomposition/TimeInterval";
 import Money from "../Models/Money";
 import Currency from "../Enums/Currency";
+import DepartmentMapper from "../../Serialized LOB/Mappers/DepartmentMapper";
+import Department from "../../Serialized LOB/Models/Department";
 
 export default class EmploymentMapper extends EntityMapper<EmploymentModel, EmploymentEntity> {
+  private readonly departmentMapper: DepartmentMapper;
+
+  public constructor() {
+    super();
+    this.departmentMapper = new DepartmentMapper();
+  }
+
   public getColumnsNames(): string[] {
-    return [
-      'id',
-      'person_id',
-      'start',
-      'end',
-      'salary_amount',
-      'salary_currency',
-    ]
+    return Object.keys(this.makePropsSet(new EmploymentModel()));
   }
 
   public getTableName(): string {
@@ -30,6 +32,7 @@ export default class EmploymentMapper extends EntityMapper<EmploymentModel, Empl
       end: model.getPeriod()?.getEnd() ? dateToDbString(model.getPeriod().getEnd()) : null,
       salary_amount: model.getSalary()?.getAmount(),
       salary_currency: model.getSalary()?.getCurrency(),
+      department: this.departmentMapper.makeProp(model.getDepartment())
     }
   }
 
@@ -50,6 +53,15 @@ export default class EmploymentMapper extends EntityMapper<EmploymentModel, Empl
         props.salary_amount,
         props.salary_currency as Currency
       ));
+    }
+
+    if (this.isString(props.department)) {
+      model.setDepartment(
+        this.departmentMapper.mapEntity(
+          new Department(),
+          props.department
+        )
+      )
     }
 
     return model;

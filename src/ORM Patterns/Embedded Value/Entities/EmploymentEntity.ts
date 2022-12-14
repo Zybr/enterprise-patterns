@@ -5,6 +5,7 @@ type EmploymentEntity = {
   end: string | null
   salary_amount: number | null
   salary_currency: string | null
+  department?: string | null
 }
 
 export default EmploymentEntity;

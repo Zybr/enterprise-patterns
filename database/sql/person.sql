@@ -23,6 +23,7 @@ CREATE TABLE employments
 (
     id              INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     person_id       INTEGER                           NOT NULL,
+    department      TEXT,
     start           DATE                              NOT NULL,
     end             DATE                              NOT NULL,
     salary_amount   REAL                              NOT NULL,

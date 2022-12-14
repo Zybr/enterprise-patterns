@@ -1,7 +1,7 @@
 import IdMixin from "./Mixins/IdMixin";
 import { ProductType } from "../../enums/ProductType";
 import Entity from "./Entity";
-import { dateToDatabase, handlePromiseError } from "../../../utils/utils";
+import { dateToDbString, handlePromiseError } from "../../../utils/utils";
 import { commonDbm } from "../../../../database/databases";
 
 export default class ProductEntity extends IdMixin(Entity) {
@@ -28,7 +28,7 @@ export default class ProductEntity extends IdMixin(Entity) {
           [
             this.contractId,
             this.type,
-            dateToDatabase(this.startDate),
+            dateToDbString(this.startDate),
             this.price,
           ],
           function(err) {

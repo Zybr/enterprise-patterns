@@ -1,19 +1,19 @@
 import Person from "../../Data Patterns/Data Source/Data Mapper/Domain/Models/Person";
 import UnitOfWork from "./UnitOfWork";
-import { personEmailDbm } from "../../../database/databases";
+import { personDbm } from "../../../database/databases";
 import ManagerFactory from "../../Data Patterns/Data Source/Data Mapper/Dao/ManagerFactory";
 import { faker } from '@faker-js/faker';
 import PersonManager from "../../Data Patterns/Data Source/Data Mapper/Dao/Managers/PersonManager";
 import { fillPerson } from "../../Data Patterns/Data Source/Data Mapper/utils/utils";
 
 describe('UnitOfWork', () => {
-  const personManager = (new ManagerFactory(personEmailDbm.getDb()))
+  const personManager = (new ManagerFactory())
     .makeManager(Person.name) as PersonManager;
   const uow = new UnitOfWork({
     [Person.name]: personManager
   });
 
-  beforeEach(async () => await personEmailDbm.init());
+  beforeEach(async () => await personDbm.init());
 
   test('registerCreated()', async () => {
     const model = fillPerson(new Person());
@@ -22,7 +22,7 @@ describe('UnitOfWork', () => {
     await uow.registerCreated(model).commit()
 
     expect(model.id).not.toBeNull();
-    const createdRow = await personEmailDbm.selectById('persons', model.id);
+    const createdRow = await personDbm.selectById('persons', model.id);
     expect(createdRow).not.toBeNull();
   });
 
@@ -35,9 +35,9 @@ describe('UnitOfWork', () => {
     model.setEmail(newEmail);
     await uow.registerUpdated(model).commit()
 
-    const updatedRow = await personEmailDbm.selectById('persons', model.id);
+    const updatedRow = await personDbm.selectById('persons', model.id);
     expect(newFirstName).toEqual(updatedRow['first_name']);
-    const updatedEmailRow = await personEmailDbm.selectById('emails', updatedRow['email_id'])
+    const updatedEmailRow = await personDbm.selectById('emails', updatedRow['email_id'])
     expect(newEmail).toEqual(updatedEmailRow['mail']);
   });
 
@@ -46,7 +46,7 @@ describe('UnitOfWork', () => {
 
     await uow.registerRemoved(model).commit()
 
-    const removedRow = await personEmailDbm.selectById('persons', model.id);
+    const removedRow = await personDbm.selectById('persons', model.id);
     expect(removedRow).toBeNull();
   });
 
@@ -57,7 +57,7 @@ describe('UnitOfWork', () => {
       .registerRemoved(model)
       .commit()
 
-    const removedRow = await personEmailDbm.selectById('persons', model.id);
+    const removedRow = await personDbm.selectById('persons', model.id);
     expect(removedRow).toBeNull();
   });
 
@@ -68,7 +68,7 @@ describe('UnitOfWork', () => {
       .registerRemoved(model)
       .commit()
 
-    const removedRow = await personEmailDbm.selectById('persons', model.id);
+    const removedRow = await personDbm.selectById('persons', model.id);
     expect(removedRow).toBeNull();
   });
 });

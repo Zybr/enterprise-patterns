@@ -16,7 +16,15 @@ export default abstract class EntityMapper<E extends IEntity | PropsSet, P exten
     return Number.isInteger(value);
   }
 
+  protected isFloat(value: any): boolean {
+    return typeof value === 'number';
+  }
+
   protected isString(value: any): boolean {
     return typeof value === "string";
+  }
+
+  protected isEnum(value: any, variants: any): boolean {
+    return Object.values(variants).includes(value);
   }
 }

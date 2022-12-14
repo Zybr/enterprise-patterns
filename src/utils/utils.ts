@@ -1,5 +1,7 @@
 /** Convert date to database format */
-export const dateToDatabase = (date: Date): string => `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+export const dateToDbString = (date: Date): string => `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+
+export const dbStringToDate = (dateString: string): Date => new Date(Date.parse(dateString));
 
 interface callable {
   (...args: any[]): any

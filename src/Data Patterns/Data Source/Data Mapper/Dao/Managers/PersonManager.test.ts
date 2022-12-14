@@ -1,5 +1,5 @@
 import ManagerFactory from "../ManagerFactory";
-import { personEmailDbm } from "../../../../../../database/databases";
+import { personDbm } from "../../../../../../database/databases";
 import Person from "../../Domain/Models/Person";
 import PropsSet from "../Entities/PropsSet";
 import PersonManager from "./PersonManager";
@@ -16,11 +16,11 @@ const assertEqualsPersons = (expected: PropsSet, actual: IPerson): void => {
 
 const createPerson = async (): Promise<PropsSet> => {
   const props = makePersonFields();
-  const emailId = await personEmailDbm.insert('emails', {
+  const emailId = await personDbm.insert('emails', {
     mail: props.email,
   });
 
-  props.id = await personEmailDbm.insert('persons', {
+  props.id = await personDbm.insert('persons', {
     first_name: props.first_name,
     last_name: props.last_name,
     email_id: emailId,
@@ -30,15 +30,15 @@ const createPerson = async (): Promise<PropsSet> => {
 }
 
 describe('PersonManager', () => {
-  const factory = new ManagerFactory(personEmailDbm.getDb());
+  const factory = new ManagerFactory();
   const personManager = factory.makeManager(Person.name) as PersonManager;
   const emailManager = factory.makeEmailManager();
 
-  beforeAll(async () => await personEmailDbm.init())
+  beforeAll(async () => await personDbm.init())
 
   beforeEach(async () => {
-    await personEmailDbm.clearTable('persons');
-    await personEmailDbm.clearTable('emails');
+    await personDbm.clearTable('persons');
+    await personDbm.clearTable('emails');
   })
 
   test('find()', async () => {
@@ -85,11 +85,11 @@ describe('PersonManager', () => {
     expect(emailSaved.mail).toEqual(set.email);
 
     // Check saved in DB
-    const personRow = await personEmailDbm.selectById('persons', set.id);
+    const personRow = await personDbm.selectById('persons', set.id);
     expect(personRow).not.toBeNull();
 
     // Check email fetched by manager
-    const emailRow = await personEmailDbm.selectById('emails', emailSaved.id);
+    const emailRow = await personDbm.selectById('emails', emailSaved.id);
     expect(emailRow).not.toBeUndefined();
     expect(emailRow['mail']).toEqual(set.email)
     expect(personRow['email_id']).toEqual(emailRow['id']);
@@ -98,12 +98,12 @@ describe('PersonManager', () => {
   test('delete()', async () => {
     const set = await createPerson();
     const person = await personManager.find(set.id)
-    let personRow = await personEmailDbm.selectById('persons', set.id);
+    let personRow = await personDbm.selectById('persons', set.id);
 
     await personManager.delete(person);
 
-    expect(await personEmailDbm.selectById('persons', set.id)).toBeNull();
-    expect(await personEmailDbm.selectById('emails', personRow['email_id'])).toBeNull();
+    expect(await personDbm.selectById('persons', set.id)).toBeNull();
+    expect(await personDbm.selectById('emails', personRow['email_id'])).toBeNull();
     expect(await personManager.find(set.id)).toBeNull();
     expect(await emailManager.find(personRow['email_id'])).toBeNull();
   });

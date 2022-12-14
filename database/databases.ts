@@ -73,4 +73,4 @@ export class DbManager {
 }
 
 export const commonDbm = new DbManager('common');
-export const personEmailDbm = new DbManager('person-email');
+export const personDbm = new DbManager('person');

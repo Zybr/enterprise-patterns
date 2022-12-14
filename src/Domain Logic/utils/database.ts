@@ -1,4 +1,4 @@
-import { dateToDatabase, handlePromiseError } from "../../utils/utils";
+import { dateToDbString, handlePromiseError } from "../../utils/utils";
 import { commonDbm } from "../../../database/databases";
 
 export const createContract = () => new Promise<number>(
@@ -16,7 +16,7 @@ export const createProduct = ({contractId, type, day, price}) => commonDbm.inser
   'products',
   {
     contract_id: contractId,
-    start_date: dateToDatabase(makeDate(day)),
+    start_date: dateToDbString(makeDate(day)),
     type,
     price,
   }

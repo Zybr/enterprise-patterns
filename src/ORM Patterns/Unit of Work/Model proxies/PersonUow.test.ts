@@ -1,5 +1,5 @@
 import ManagerFactory from "../../../Data Patterns/Data Source/Data Mapper/Dao/ManagerFactory";
-import { personEmailDbm } from "../../../../database/databases";
+import { personDbm } from "../../../../database/databases";
 import Person from "../../../Data Patterns/Data Source/Data Mapper/Domain/Models/Person";
 import PersonManager from "../../../Data Patterns/Data Source/Data Mapper/Dao/Managers/PersonManager";
 import UnitOfWork from "../UnitOfWork";
@@ -7,20 +7,20 @@ import { fillPerson } from "../../../Data Patterns/Data Source/Data Mapper/utils
 import PersonUow from "./PersonUow";
 
 describe('PersonUow', () => {
-  const personManager = (new ManagerFactory(personEmailDbm.getDb()))
+  const personManager = (new ManagerFactory())
     .makeManager(Person.name) as PersonManager;
   const uow = new UnitOfWork({
     [Person.name]: personManager
   });
 
-  beforeEach(async () => await personEmailDbm.init());
+  beforeEach(async () => await personDbm.init());
 
   test('create', async () => {
     const model = fillPerson(new PersonUow(uow, new Person()));
 
     await uow.commit();
 
-    const createdRow = await personEmailDbm.selectById('persons', model.id);
+    const createdRow = await personDbm.selectById('persons', model.id);
     expect(createdRow).not.toBeNull();
   });
 
@@ -30,7 +30,7 @@ describe('PersonUow', () => {
 
     await uow.commit();
 
-    const createdRow = await personEmailDbm.selectById('persons', model.id);
+    const createdRow = await personDbm.selectById('persons', model.id);
     expect(createdRow).not.toBeNull();
   });
 
@@ -40,7 +40,7 @@ describe('PersonUow', () => {
     model.delete();
     await uow.commit();
 
-    const createdRow = await personEmailDbm.selectById('persons', model.id);
+    const createdRow = await personDbm.selectById('persons', model.id);
     expect(createdRow).toBeNull();
   });
 });

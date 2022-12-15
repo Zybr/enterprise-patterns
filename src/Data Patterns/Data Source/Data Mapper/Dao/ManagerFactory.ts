@@ -8,9 +8,9 @@ import PropsSet from "./Entities/PropsSet";
 import PersonMapper from "./Mappers/PersonMapper";
 import EmailMapper from "./Mappers/EmailMapper";
 import { IEntity } from "./Entities/IEntity";
-import EmploymentModel from "../../../../ORM Patterns/Embedded Value/Models/EmploymentModel";
-import EmploymentManager from "../../../../ORM Patterns/Embedded Value/Managers/EmploymentManager";
-import EmploymentMapper from "../../../../ORM Patterns/Embedded Value/Mappers/EmploymentMapper";
+import EmploymentModel from "../../../../ORM Patterns/Structural/Embedded Value/Models/EmploymentModel";
+import EmploymentManager from "../../../../ORM Patterns/Structural/Embedded Value/Managers/EmploymentManager";
+import EmploymentMapper from "../../../../ORM Patterns/Structural/Embedded Value/Mappers/EmploymentMapper";
 
 export default class ManagerFactory {
   private readonly db: Database;

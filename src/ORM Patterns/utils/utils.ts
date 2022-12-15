@@ -1,5 +1,5 @@
-import Department from "../Serialized LOB/Models/Department";
-import DepartmentEntity from "../Serialized LOB/Entities/DepartmentEntity";
+import Department from "../Structural/Serialized LOB/Models/Department";
+import DepartmentEntity from "../Structural/Serialized LOB/Entities/DepartmentEntity";
 
 export const assertDepartmentContent = (department: Department, props: DepartmentEntity): void => {
   expect(department.getName()).toEqual(props.name);

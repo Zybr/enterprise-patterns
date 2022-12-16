@@ -8,7 +8,7 @@ export default class PersonRender {
 
   public transform(person: IPerson): string {
     const xmlString = this.transformer.toXml(person);
-    const xsltString = fs.readFileSync(__dirname + '/person.xslt').toString();
+    const xsltString = fs.readFileSync(__dirname + '/xslt/person.xslt').toString();
 
     return xsltProcess(
       xmlParse(xmlString),

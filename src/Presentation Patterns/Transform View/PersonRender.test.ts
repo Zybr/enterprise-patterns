@@ -3,7 +3,7 @@ import { fillPerson } from "../../Data Patterns/Data Source/Data Mapper/utils/ut
 import Person from "../../Data Patterns/Data Source/Data Mapper/Domain/Models/Person";
 
 describe('PersonRender', () => {
-  // TODO: The test is skipped since XSLT library doesn't work ask expected
+  // TODO: The test is skipped since XSLT library doesn't work as expected
   test.skip('toHtml()', () => {
     const person = fillPerson(new Person());
     const render = new PersonRender();

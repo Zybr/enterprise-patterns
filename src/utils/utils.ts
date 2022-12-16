@@ -3,7 +3,7 @@ export const dateToDbString = (date: Date): string => `${date.getFullYear()}-${d
 
 export const dbStringToDate = (dateString: string): Date => new Date(Date.parse(dateString));
 
-interface callable {
+export interface callable {
   (...args: any[]): any
 }
 

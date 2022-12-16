@@ -1,5 +1,5 @@
 import PersonTransformView from "./PersonTransformView";
-import IPerson from "../../Data Patterns/Data Source/Data Mapper/Domain/Models/IPerson";
+import IPerson from "../../../Data Patterns/Data Source/Data Mapper/Domain/Models/IPerson";
 import * as fs from 'fs';
 import { xsltProcess, xmlParse } from 'xslt-processor'
 

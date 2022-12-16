@@ -1,6 +1,6 @@
 import PersonRender from "./PersonRender";
-import { fillPerson } from "../../Data Patterns/Data Source/Data Mapper/utils/utils";
-import Person from "../../Data Patterns/Data Source/Data Mapper/Domain/Models/Person";
+import { fillPerson } from "../../../Data Patterns/Data Source/Data Mapper/utils/utils";
+import Person from "../../../Data Patterns/Data Source/Data Mapper/Domain/Models/Person";
 
 describe('PersonRender', () => {
   // TODO: The test is skipped since XSLT library doesn't work as expected

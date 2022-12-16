@@ -1,4 +1,4 @@
-import IPerson from "../../Data Patterns/Data Source/Data Mapper/Domain/Models/IPerson";
+import IPerson from "../../../Data Patterns/Data Source/Data Mapper/Domain/Models/IPerson";
 
 export default class PersonTransformView {
   public toXml(person: IPerson): string {

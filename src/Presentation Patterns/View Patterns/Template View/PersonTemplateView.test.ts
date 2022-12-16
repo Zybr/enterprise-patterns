@@ -1,5 +1,5 @@
-import { fillPerson } from "../../Data Patterns/Data Source/Data Mapper/utils/utils";
-import Person from "../../Data Patterns/Data Source/Data Mapper/Domain/Models/Person";
+import { fillPerson } from "../../../Data Patterns/Data Source/Data Mapper/utils/utils";
+import Person from "../../../Data Patterns/Data Source/Data Mapper/Domain/Models/Person";
 import PersonTemplateView from "./PersonTemplateView";
 
 describe('PersonTemplateView', () => {

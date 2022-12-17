@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "check-env": "jest --runInBand --detectOpenHandles -- env-test/cat.test.ts",
+    "db-init": "ts-node ./database/init_db.ts & (cd src/Data\\ Patterns/Data\\ Source/Framework\\ DAO/ &&  npx prisma migrate dev --name init)",
     "test": "jest --runInBand --detectOpenHandles"
   },
   "repository": {

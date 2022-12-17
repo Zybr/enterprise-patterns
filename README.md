@@ -1,15 +1,21 @@
 # Enterprise patterns
 
-## Check configured TypeScript interpreter
+## Install packages
 
 ```shell
-npx -s sh ts-node ./env-test/run.ts
+npm i
 ```
 
-## Initialize database
+## Check TypeScript interpreter
 
 ```shell
-npx -s sh ts-node ./database/init_db.t
+npm run check-env
+```
+
+## Initialize databases
+
+```shell
+npm run db-init
 ```
 
 ## Run tests

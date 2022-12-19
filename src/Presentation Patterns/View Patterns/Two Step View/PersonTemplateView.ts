@@ -7,7 +7,7 @@ export default class PersonTemplateView extends ATemplateView {
 
   public render(person): string {
     return this.fillTemplate( // Make final HTML
-      fs.readFileSync(__dirname + '/../Template View/views/person.tpl').toString(), // Get template
+      fs.readFileSync(__dirname + '/../Template View/templates/person.tpl').toString(), // Get template
       this.objectFactory.makeObject(person) // Make render object
     );
   }

@@ -5,7 +5,7 @@ import ATemplateView from "./ATemplateView";
 export default class PersonTemplateView extends ATemplateView {
   public render(person: IPerson): string {
     return this.fillTemplate(
-      fs.readFileSync(__dirname + '/views/person.tpl').toString(),
+      fs.readFileSync(__dirname + '/templates/person.tpl').toString(),
       {
         id: person.id,
         fullName: `${person.getFirstName()} ${person.getLastName()}`,

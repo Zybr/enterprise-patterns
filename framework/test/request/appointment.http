@@ -1,0 +1,76 @@
+### Define patient
+GET http://localhost:3000/patient
+Accept: application/json
+
+> {%client.test('Define patient', function () {
+      client.assert(response.status === 200)
+      client.global.set('patient-id', response.body[0].id);
+}); %}
+
+### Define doctor
+GET http://localhost:3000/patient
+Accept: application/json
+
+> {%client.test('Define doctor', function () {
+      client.assert(response.status === 200)
+      client.global.set('doctor-id', response.body[0].id);
+}); %}
+
+### Create
+POST http://localhost:3000/appointment
+Accept: application/json
+Content-Type: application/json
+
+{
+  "patient": {{patient-id}},
+  "doctor": {{doctor-id}}
+}
+
+> {%client.test('Create', function () {
+	client.log(client.global.get('patient-id'));
+      client.assert(response.status === 201)
+      client.assert(response.body.patient === 1 * client.global.get('patient-id'))
+      client.assert(response.body.doctor === 1 * client.global.get('doctor-id'))
+}); %}
+
+### Find all
+GET http://localhost:3000/appointment
+Accept: application/json
+
+> {%client.test('Find all', function () {
+      client.assert(response.status === 200)
+      client.global.set('id', response.body[0].id);
+}); %}
+
+### Find one
+GET http://localhost:3000/appointment/{{id}}
+Accept: application/json
+
+> {%client.test('Find one', function () {
+      client.assert(response.status === 200)
+}); %}
+
+### Update
+PUT http://localhost:3000/appointment/{{id}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "patient": {{patient-id}},
+  "doctor": {{doctor-id}}
+}
+
+> {%client.test('Update', function () {
+      client.assert(response.status === 200)
+      client.assert(response.body.patient === 1 * client.global.get('patient-id'))
+      client.assert(response.body.doctor === 1 * client.global.get('doctor-id'))
+}); %}
+
+
+### Remove
+DELETE http://localhost:3000/appointment/{{id}}
+Accept: application/json
+
+> {%client.test('Remove', function () {
+      client.assert(response.status === 200)
+}); %}

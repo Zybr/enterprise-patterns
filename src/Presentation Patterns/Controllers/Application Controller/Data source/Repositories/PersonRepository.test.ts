@@ -4,6 +4,7 @@ import Person from "../../../../../Data Patterns/Data Source/Data Mapper/Domain/
 import { fillPerson } from "../../../../../Data Patterns/Data Source/Data Mapper/utils/utils";
 import PersonManager from "../../../../../Data Patterns/Data Source/Data Mapper/Dao/Managers/PersonManager";
 import PersonRepository from "./PersonRepository";
+import { assertReject } from "../../../../../utils/tests";
 
 describe('PersonRepository', () => {
   const manager = new ManagerFactory().makeManager(Person.name) as PersonManager;
@@ -31,8 +32,9 @@ describe('PersonRepository', () => {
 
     // Not found
     const notExistId = Math.pow(10, 10);
-    expect(() => repository.findOrFail(notExistId))
-      .rejects
-      .toEqual(new Error(`There is not a model with ID ${notExistId}`))
+    await assertReject(
+      repository.findOrFail(notExistId),
+      `There is not a model with ID ${notExistId}`
+    );
   });
 });

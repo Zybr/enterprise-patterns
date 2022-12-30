@@ -1,6 +1,7 @@
 import RepositoryFactory from "../RepositoryFactory";
 import ManagerFactory from "../../../../../Data Patterns/Data Source/Data Mapper/Dao/ManagerFactory";
 import { faker } from '@faker-js/faker';
+import { assertReject } from "../../../../../utils/tests";
 
 describe('EmailRepository', () => {
   const manager = new ManagerFactory().makeEmailManager();
@@ -32,8 +33,9 @@ describe('EmailRepository', () => {
 
     // Not found
     const notExistId = Math.pow(10, 10);
-    expect(() => repository.findOrFail(notExistId))
-      .rejects
-      .toEqual(new Error(`There is not a model with ID ${notExistId}`))
+    await assertReject(
+      repository.findOrFail(notExistId),
+      `There is not a model with ID ${notExistId}`
+    );
   });
 });

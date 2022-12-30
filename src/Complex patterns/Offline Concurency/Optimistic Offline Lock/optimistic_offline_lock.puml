@@ -1,0 +1,16 @@
+@startuml
+class Record  {
+    + id: int
+    + version: int
+    + text: string
+}
+
+class Storage {
+    + read (id: int): Record
+    + write (record: Record): void
+    + clear(): void
+}
+
+Storage ..> Record
+
+@enduml

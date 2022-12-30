@@ -1,6 +1,7 @@
 import ResourcePool from "../ResourcePool";
 import { commonDbm } from "../../../../../database/databases";
 import Retryer from "./Retryer";
+import { assertReject } from "../../../../utils/tests";
 
 const pool = new ResourcePool(10, commonDbm.getDbPath());
 const SQL = "SELECT COUNT(*) as count FROM persons";
@@ -24,9 +25,10 @@ describe('Retryer', () => {
       .mockImplementation(() => Promise.reject(new Error('Error message')));
     const retryer = new Retryer(resource, 3);
 
-    await expect(retryer.selectOne(SQL, []))
-      .rejects
-      .toEqual(new Error('Error message'));
+    await assertReject(
+      retryer.selectOne(SQL, []),
+      'Error message'
+    );
 
     expect(resource.selectOne).toBeCalled();
     expect(spy.mock.calls).toEqual([

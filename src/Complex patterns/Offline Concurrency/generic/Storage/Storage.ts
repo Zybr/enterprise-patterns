@@ -4,31 +4,25 @@ import ILine from "./ILine";
 
 const open = fs.promises.open;
 
-export default class Storage {
-  private readonly fileName: string;
-  private lines: ILine[] = [];
+export default class Storage<R extends Record, L extends ILine> {
+  protected readonly fileName: string;
+  protected lines: L[] = [];
 
   public constructor(fileName: string) {
     this.fileName = fileName;
   }
 
-  public read(id: number): Promise<Record | null> {
+  public read(id: number): Promise<R | null> {
     return this.getLines()
       .then(lines => lines[id])
       .then(line => line ? this.lineToRecord(id, line) : null);
   }
 
-  public write(record: Record): Promise<Record> {
+  public write(record: R): Promise<R> {
     record.setId(record.getId() !== null ? record.getId() : this.lines.length);
 
     return this.getLines()
-      .then(lines => {
-        if (lines[record.getId()] && lines[record.getId()].version !== record.getVersion()) {
-          throw new Error(`Passed version is out of date: ${record.getVersion()} < ${lines[record.getId()].version}`);
-        }
-
-        lines[record.getId()] = this.recordToLine(record.incrementVersion())
-      })
+      .then(lines => lines[record.getId()] = this.recordToLine(record))
       .then(() => open(this.fileName, 'w'))
       .then(file => {
         file.write(
@@ -42,7 +36,7 @@ export default class Storage {
   }
 
   public clear() {
-    // TODO: Reset IDs and versions of produced records
+    // TODO: Reset IDs of produced records
     return open(this.fileName, 'w')
       .then(file => this
         .getLines()
@@ -50,7 +44,7 @@ export default class Storage {
       );
   }
 
-  private getLines(): Promise<ILine[]> {
+  protected getLines(): Promise<L[]> {
     return open(this.fileName, 'a+')
       .then(
         async (file) => {
@@ -65,17 +59,15 @@ export default class Storage {
       );
   }
 
-  private lineToRecord(id: number, line: ILine): Record {
+  protected lineToRecord(id: number, line: L): R {
     return (new Record())
       .setId(id)
-      .setVersion(line.version)
-      .setData(line.data)
+      .setData(line.data) as R
   }
 
-  private recordToLine(record: Record): any {
+  protected recordToLine(record: R): L {
     return {
-      version: record.getVersion(),
       data: record.getData(),
-    }
+    } as L
   }
 }

@@ -1,0 +1,41 @@
+@startuml
+!includesub ../generic/Storage/storage.puml!BaseStorage
+
+interface ILockManager {
+    + lock (id): void
+    + unlock (id): void
+}
+
+class LockManagerFactory {
+    + getLockManager (resourceType): ILockManager
+}
+
+class RecordLockManager {
+    + lock (id): void
+    + unlock (id): void
+}
+
+class RecordLockStorage {
+}
+
+class LockableRecord {
+}
+
+note as ResourceType
+    "file-record" => RecordLockManager
+    "..." => ...
+end note
+
+ILockManager <|.. RecordLockManager
+
+LockManagerFactory ..> RecordLockManager
+LockManagerFactory .left.> ResourceType
+
+RecordLockManager *--> RecordLockStorage
+
+RecordLockStorage -left-|> Storage
+RecordLockStorage --> LockableRecord
+
+LockableRecord -left-|> Record
+
+@enduml

@@ -5,5 +5,7 @@ module.exports = {
 	modulePathIgnorePatterns: [
 		'<rootDir>/src/Complex patterns/Offline Concurrency/generic/Storage/Storage.test.ts',
 		'<rootDir>/src/Complex patterns/Offline Concurrency/Optimistic Offline Lock/Storage.test.ts',
+		'<rootDir>/src/Complex patterns/Offline Concurrency/Pessimistic Offline Lock/Storage/RecordLockStorage.test.ts',
+		'<rootDir>/src/Complex patterns/Offline Concurrency/Pessimistic Offline Lock/RecordLockManager.test.ts',
 	],
 }

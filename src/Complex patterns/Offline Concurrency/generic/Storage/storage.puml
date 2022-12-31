@@ -1,7 +1,8 @@
 @startuml
+!startsub BaseStorage
+
 class Record  {
     + id: int
-    + version: int
     + text: string
 }
 
@@ -12,5 +13,5 @@ class Storage {
 }
 
 Storage ..> Record
-
+!endsub
 @enduml

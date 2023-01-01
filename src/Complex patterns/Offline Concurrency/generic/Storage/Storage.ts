@@ -1,10 +1,11 @@
 import * as fs from 'fs';
 import Record from "./Record";
 import ILine from "./ILine";
+import IStorage from "./IStorage";
 
 const open = fs.promises.open;
 
-export default class Storage<R extends Record, L extends ILine> {
+export default class Storage<R extends Record, L extends ILine> implements IStorage<R> {
   protected readonly fileName: string;
   protected lines: L[] = [];
 
@@ -19,6 +20,10 @@ export default class Storage<R extends Record, L extends ILine> {
   }
 
   public write(record: R): Promise<R> {
+    if (record.getId() === -1) {
+      throw new Error('Record is detached from ORM');
+    }
+
     record.setId(record.getId() !== null ? record.getId() : this.lines.length);
 
     return this.getLines()
@@ -35,7 +40,7 @@ export default class Storage<R extends Record, L extends ILine> {
       .then(() => record);
   }
 
-  public clear() {
+  public clear(): Promise<void> {
     // TODO: Reset IDs of produced records
     return open(this.fileName, 'w')
       .then(file => this

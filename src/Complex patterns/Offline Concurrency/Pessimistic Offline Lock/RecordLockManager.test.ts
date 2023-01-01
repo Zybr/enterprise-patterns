@@ -3,11 +3,12 @@ import ResourceType from "./Enums/ResourceType";
 import RecordLockStorage from "./Storage/RecordLockStorage";
 import RecordLockManager from "./RecordLockManager";
 import { assertReject } from "../../../utils/tests";
-import { makeRecord } from "./Storage/utils/tests";
+import { makeLockableRecord } from "./Storage/utils/tests";
 
 describe('RecordLockManager', () => {
-  const storage = (new RecordLockStorage(__dirname + '/data.txt'));
-  const lockMgr = (new LockManagerFactory()).getLockManager(ResourceType.FileRecord) as RecordLockManager;
+  const fileName = __dirname + '/data.txt';
+  const storage = (new RecordLockStorage(fileName));
+  const lockMgr = (new LockManagerFactory(fileName)).getLockManager(ResourceType.FileRecord) as RecordLockManager;
 
   beforeEach(async () => await storage.clear());
 
@@ -28,7 +29,7 @@ describe('RecordLockManager', () => {
   });
 
   test('lock(); unlock();', async () => {
-    let record = await storage.write(makeRecord())
+    let record = await storage.write(makeLockableRecord())
 
     // Lock
     record = await lockMgr.lock(record.getId());
@@ -51,7 +52,7 @@ describe('RecordLockManager', () => {
   });
 
   test('lock() - concurrency', async () => {
-    let record = await storage.write(makeRecord())
+    let record = await storage.write(makeLockableRecord())
 
     // Lock
     record = await lockMgr.lock(record.getId());

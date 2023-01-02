@@ -1,10 +1,12 @@
 import History from "./History";
 import { faker } from '@faker-js/faker';
+import { generateUid } from "../../../utils/utils";
 
 describe('History', () => {
-  const history = new History(__dirname + '/history.txt');
+  const history = new History(__dirname + '/history/');
+  const sessionId = generateUid();
 
-  beforeEach(async () => await history.clear());
+  beforeEach(() => history.clear(sessionId));
 
   test('add(); lines(); clear()', async () => {
     const items = [
@@ -13,12 +15,12 @@ describe('History', () => {
       {key: faker.word.noun()},
     ]
 
-    items.forEach(item => history.add(item));
+    items.forEach(item => history.add(sessionId, item));
 
-    expect(history.list()).toEqual(items);
+    expect(history.list(sessionId,)).toEqual(items);
 
-    await history.clear();
+    await history.clear(sessionId);
 
-    expect(history.list()).toEqual([]);
+    expect(history.list(sessionId)).toEqual([]);
   });
 });

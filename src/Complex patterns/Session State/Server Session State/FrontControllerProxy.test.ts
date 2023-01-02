@@ -2,15 +2,17 @@ import FrontController from "../../../Presentation Patterns/Controllers/Front Co
 import FrontControllerProxy from "./FrontControllerProxy";
 import History from "./History";
 import { commonDbm } from "../../../../database/databases";
+import { generateUid } from "../../../utils/utils";
 
 describe('FrontControllerProxy', () => {
-  const history = new History(__dirname + '/history.txt');
+  const history = new History(__dirname + '/history/');
   const controller = new FrontController();
   const proxy = new FrontControllerProxy(controller, history)
+  const sessionId = generateUid();
 
   beforeAll(async () => {
     await commonDbm.init();
-    await history.clear();
+    history.clear(sessionId);
   });
 
   test('handleCommand()', async () => {
@@ -30,9 +32,9 @@ describe('FrontControllerProxy', () => {
     ];
 
     await Promise.all(
-      commands.map(command => proxy.handleCommand(command.name, ...command.args))
+      commands.map(command => proxy.handleCommand(sessionId, command.name, ...command.args))
     );
 
-    expect(history.list()).toEqual(commands);
+    expect(history.list(sessionId)).toEqual(commands);
   });
 });

@@ -1,3 +1,5 @@
+const {v4: uuidv4} = require('uuid');
+
 /** Convert date to database format */
 export const dateToDbString = (date: Date): string => `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 
@@ -16,3 +18,5 @@ export const handlePromiseError = (reject: callable, err?: Error | null) => {
 export const camelCaseToUnderscore = (attr: string): string => {
   return attr.split(/\.?(?=[A-Z])/).join('_').toLowerCase();
 }
+
+export const generateUid = (): string => uuidv4();

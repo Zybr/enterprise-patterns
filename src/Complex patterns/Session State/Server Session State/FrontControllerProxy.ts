@@ -9,11 +9,14 @@ export default class FrontControllerProxy implements IFrontController {
   ) {
   }
 
-  public handleCommand(commandName: string, ...args: any[]): Promise<string> {
-    this.history.add({
-      name: commandName,
-      args,
-    });
+  public handleCommand(sessionId: string, commandName: string, ...args: any[]): Promise<string> {
+    this.history.add(
+      sessionId,
+      {
+        name: commandName,
+        args,
+      }
+    );
 
     return this.controller.handleCommand(commandName, ...args);
   }

@@ -1,3 +1,3 @@
 export default interface IFrontController {
-  handleCommand(commandName: string, ...args: any[]): Promise<string>;
+  handleCommand(sessionId: string, commandName: string, ...args: any[]): Promise<string>;
 }

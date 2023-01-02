@@ -1,26 +1,24 @@
 import * as fs from 'fs';
 
-const open = fs.promises.open;
-
 export default class History {
   private readonly RECORD_SPLITTER = '\n'
 
   constructor(
-    private readonly fileName: string,
+    private readonly dirName: string,
   ) {
   }
 
-  public add(data: Object): void {
+  public add(id: string, data: Object): void {
     fs.writeFileSync(
-      this.fileName,
+      this.getFilePath(id),
       this.RECORD_SPLITTER + JSON.stringify(data),
       {flag: 'a+'}
     );
   }
 
-  public list(): {}[] {
+  public list(id: string): {}[] {
     return fs.readFileSync(
-      this.fileName,
+      this.getFilePath(id),
       {encoding: 'utf8'}
     )
       .split(this.RECORD_SPLITTER)
@@ -28,8 +26,15 @@ export default class History {
       .map(line => JSON.parse(line));
   }
 
-  public clear(): Promise<void> {
-    return open(this.fileName, 'w')
-      .then(file => file.close())
+  public clear(id: string): void {
+    fs.writeFileSync(
+      this.getFilePath(id),
+      '',
+      {flag: 'w'}
+    );
+  }
+
+  protected getFilePath(sessionId: string): string {
+    return `${this.dirName}${sessionId}.txt`;
   }
 }

@@ -70,7 +70,19 @@ export class DbManager {
       }
     )
   );
+
+  public selectAll = (table: string) => new Promise<[][]>(
+    (resolve, reject) => this.getDb().all(
+      `SELECT *
+       FROM ${table}`,
+      function(err, rows: [][]) {
+        handlePromiseError(reject, err);
+        resolve(rows);
+      }
+    )
+  );
 }
 
 export const commonDbm = new DbManager('common');
 export const personDbm = new DbManager('person');
+export const sessionDbm = new DbManager('session');

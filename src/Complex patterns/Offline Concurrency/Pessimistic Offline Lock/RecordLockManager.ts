@@ -8,19 +8,19 @@ export default class RecordLockManager implements ILockManager {
   ) {
   }
 
-  public lock(id: number): Promise<LockableRecord> {
-    return this.storage
-      .read(id)
-      .then(record => this.checkRecordExisted(id, record))
-      .then(record => this.checkRecordNotLocked(record))
-      .then(record => this.storage.write(record.lock()))
+  public lock(id: number): LockableRecord {
+    const record = this.storage.read(id);
+    this.checkRecordExisted(id, record);
+    this.checkRecordNotLocked(record);
+
+    return this.storage.write(record.lock());
   }
 
-  public unlock(id: number): Promise<LockableRecord> {
-    return this.storage
-      .read(id)
-      .then(record => this.checkRecordExisted(id, record))
-      .then(record => this.storage.write(record.unlock()))
+  public unlock(id: number): LockableRecord {
+    const record = this.storage.read(id);
+    this.checkRecordExisted(id, record);
+
+    return this.storage.write(record.unlock());
   }
 
   private checkRecordExisted(id: number, record: LockableRecord | null): LockableRecord {

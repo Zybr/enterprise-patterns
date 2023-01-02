@@ -3,9 +3,8 @@ import Record from "./Record";
 import ILine from "./ILine";
 import IStorage from "./IStorage";
 
-const open = fs.promises.open;
-
 export default class Storage<R extends Record, L extends ILine> implements IStorage<R> {
+  private readonly RECORD_SPLITTER = '\n'
   protected readonly fileName: string;
   protected lines: L[] = [];
 
@@ -13,55 +12,49 @@ export default class Storage<R extends Record, L extends ILine> implements IStor
     this.fileName = fileName;
   }
 
-  public read(id: number): Promise<R | null> {
-    return this.getLines()
-      .then(lines => lines[id])
-      .then(line => line ? this.lineToRecord(id, line) : null);
+  public read(id: number): R | null {
+    const line = this.fetchLines()[id];
+    return line ? this.lineToRecord(id, line) : null;
   }
 
-  public write(record: R): Promise<R> {
+  public write(record: R): R {
     if (record.getId() === -1) {
       throw new Error('Record is detached from ORM');
     }
 
     record.setId(record.getId() !== null ? record.getId() : this.lines.length);
+    this.fetchLines();
+    this.lines[record.getId()] = this.recordToLine(record);
 
-    return this.getLines()
-      .then(lines => lines[record.getId()] = this.recordToLine(record))
-      .then(() => open(this.fileName, 'w'))
-      .then(file => {
-        file.write(
-          this.lines
-            .map(line => JSON.stringify(line))
-            .join("\n")
-        );
-        file.close();
-      })
-      .then(() => record);
+    fs.writeFileSync(
+      this.fileName,
+      this.lines
+        .map(line => JSON.stringify(line))
+        .join(this.RECORD_SPLITTER),
+      {flag: 'w+'}
+    );
+
+    return record;
   }
 
-  public clear(): Promise<void> {
+  public clear(): void {
     // TODO: Reset IDs of produced records
-    return open(this.fileName, 'w')
-      .then(file => this
-        .getLines()
-        .then(() => file.close())
-      );
+    fs.writeFileSync(
+      this.fileName,
+      '',
+      {flag: 'w+'}
+    );
+    this.lines = [];
   }
 
-  protected getLines(): Promise<L[]> {
-    return open(this.fileName, 'a+')
-      .then(
-        async (file) => {
-          this.lines = [];
-          for await (const line of file.readLines()) {
-            this.lines.push(JSON.parse(line));
-          }
-
-          file.close();
-          return this.lines;
-        }
-      );
+  protected fetchLines(): L[] {
+    return this.lines = fs.readFileSync(
+      this.fileName,
+      {encoding: 'utf8'}
+    )
+      .split(this.RECORD_SPLITTER)
+      .filter(line => line.length)
+      .map(line => JSON.parse(line));
   }
 
   protected lineToRecord(id: number, line: L): R {

@@ -3,17 +3,17 @@ import ILine from "./ILine";
 import { default as BaseStorage } from "../generic/Storage/Storage";
 
 export default class Storage extends BaseStorage<Record, ILine> {
-  public write(record: Record): Promise<Record> {
+  public write(record: Record): Record {
     record.setId(record.getId() !== null ? record.getId() : this.lines.length);
 
-    return this.getLines()
-      .then(lines => {
-        if (lines[record.getId()] && lines[record.getId()].version !== record.getVersion()) {
-          throw new Error(`Passed version is out of date: ${record.getVersion()} < ${lines[record.getId()].version}`);
-        }
-        record.incrementVersion();
-      })
-      .then(() => super.write(record))
+    this.fetchLines();
+
+    if (this.lines[record.getId()] && this.lines[record.getId()].version !== record.getVersion()) {
+      throw new Error(`Passed version is out of date: ${record.getVersion()} < ${this.lines[record.getId()].version}`);
+    }
+    record.incrementVersion();
+
+    return super.write(record);
   }
 
   protected lineToRecord(id: number, line: ILine): Record {

@@ -1,7 +1,6 @@
 import Storage from "./Storage";
 import Record from "./Record";
 import { faker } from "@faker-js/faker";
-import { assertReject } from "../../../utils/tests";
 
 const makeRecord = (data: any): Record => new Record().setData(data);
 
@@ -10,33 +9,31 @@ describe('Storage', () => {
   const dataA = {value: faker.word.noun()};
   const dataB = {value: faker.word.noun()};
 
-  beforeEach(async () => await storage.clear());
+  beforeEach(() => storage.clear());
 
-  test('write() - version', async () => {
+  test('write() - version', () => {
     const recordA = makeRecord(dataA);
 
-    await storage.write(recordA);
+    storage.write(recordA);
     expect(recordA.getVersion()).toEqual(1);
 
     recordA.setData(dataB);
-    await storage.write(recordA);
+    storage.write(recordA);
     expect(recordA.getVersion()).toEqual(2);
 
-    await storage.write(recordA);
+    storage.write(recordA);
     expect(recordA.getVersion()).toEqual(3);
   });
 
-  test('write() - concurrency', async () => {
+  test('write() - concurrency', () => {
     const recordA = makeRecord(dataA);
-    const storedRecordA1 = await storage.write(recordA);
-    const storedRecordA2 = await storage.read(recordA.getId());
+    const storedRecordA1 = storage.write(recordA);
+    const storedRecordA2 = storage.read(recordA.getId());
 
     storedRecordA2.setData(dataB);
-    await storage.write(storedRecordA2)
+    storage.write(storedRecordA2)
 
-    await assertReject(
-      storage.write(storedRecordA1),
-      'Passed version is out of date: 1 < 2'
-    );
+    expect(() => storage.write(storedRecordA1))
+      .toThrow('Passed version is out of date: 1 < 2');
   });
 });

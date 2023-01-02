@@ -13,44 +13,35 @@ export default class Repository implements IStorage<Record> {
   ) {
   }
 
-  public read(id: number): Promise<Record | null> {
-    return this.storage
-      .read(id)
-      .then(
-        record => record
-          ? this.lock(record)
-          : record
-      );
+  public read(id: number): Record | null {
+    const record = this.storage.read(id);
+
+    return record
+      ? this.lock(record)
+      : record
   }
 
-  public write(record: Record): Promise<Record> {
-    return this.storage
-      .write(record)
-      .then(
-        record => this.lockMgr
-          .unlock(record.getId())
-          .then(() => {
-            this.locked.delete(record.getId());
-            record.setId(-1); // Detach record from storage. It requires client to fetch/lock record again.
-            return record;
-          })
-      )
+  public write(record: Record): Record {
+    this.storage.write(record);
+    this.lockMgr.unlock(record.getId());
+    this.locked.delete(record.getId());
+    record.setId(-1); // Detach record from storage. It requires client to fetch/lock record again.
+
+    return record;
   }
 
-  public clear(): Promise<void> {
+  public clear(): void {
     return this.storage.clear();
   }
 
-  private lock(record: Record): Promise<Record> {
+  private lock(record: Record): Record {
     if (this.locked.has(record.getId())) {
-      return Promise.resolve(record);
+      return record;
     }
 
-    return this.lockMgr
-      .lock(record.getId())
-      .then(() => {
-        this.locked.add(record.getId());
-        return record;
-      });
+    this.lockMgr.lock(record.getId())
+    this.locked.add(record.getId());
+
+    return record;
   }
 }

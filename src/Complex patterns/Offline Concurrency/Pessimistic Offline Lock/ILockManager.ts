@@ -1,5 +1,5 @@
 export default interface ILockManager {
-  lock(id): Promise<any>;
+  lock(id): any;
 
-  unlock(id): Promise<any>;
+  unlock(id): any;
 }

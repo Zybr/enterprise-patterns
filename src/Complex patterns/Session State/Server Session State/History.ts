@@ -14,7 +14,7 @@ export default class History {
     fs.writeFileSync(
       this.fileName,
       this.RECORD_SPLITTER + JSON.stringify(data),
-      {flag: 'a'}
+      {flag: 'a+'}
     );
   }
 

@@ -1,7 +1,7 @@
 export default interface IStorage<R> {
-  read(id: number): Promise<R | null>
+  read(id: number): R | null
 
-  write(record: R): Promise<R>
+  write(record: R): R
 
-  clear(): Promise<void>
+  clear(): void
 }

@@ -5,6 +5,16 @@ export const dateToDbString = (date: Date): string => `${date.getFullYear()}-${d
 
 export const dbStringToDate = (dateString: string): Date => new Date(Date.parse(dateString));
 
+export const dateTimeToDbString = (date: Date): string =>
+  `${date.getFullYear()}`
+  + `-${('' + date.getMonth() + 1).padStart(2, '0')}`
+  + `-${('' + date.getDate()).padStart(2, '0')}`
+  + ` ${('' + date.getHours()).padStart(2, '0')}`
+  + `:${('' + date.getMinutes()).padStart(2, '0')}`
+  + `:${('' + date.getSeconds()).padStart(2, '0')}`;
+
+export const dbStringToDateTime = (dateTimeString: string): Date => new Date(Date.parse(dateTimeString));
+
 export interface callable {
   (...args: any[]): any
 }

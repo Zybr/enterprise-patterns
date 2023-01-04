@@ -1,0 +1,11 @@
+@startuml
+
+class Registry {
+    - services: []
+    - config: {}
+    + getService (className: string): Object
+    + getService (alias: string): Object
+    + getConfig (name: string): any
+}
+
+@enduml

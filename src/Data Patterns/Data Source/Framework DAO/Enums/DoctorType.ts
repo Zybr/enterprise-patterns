@@ -1,7 +1,7 @@
 enum DoctorType {
   Cardiologist = 'Cardiologist',
   Oncologist = 'Oncologist',
-  Therapist = 'Oncologist',
+  Therapist = 'Therapist',
 }
 
 export default DoctorType;

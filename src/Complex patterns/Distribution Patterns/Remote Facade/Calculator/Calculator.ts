@@ -2,12 +2,18 @@ import sxml = require("sxml");
 import XML = sxml.XML;
 import RequestFactory from "./RequestFactory";
 import Action from "./ActionEnum";
+import { IClient } from "./IClient";
 
 const xml = require('xml');
 
 export default class Calculator {
   private readonly serviceUrl = 'http://www.dneonline.com/calculator.asmx';
   private readonly factory = new RequestFactory();
+
+  public constructor(
+    private readonly client: IClient
+  ) {
+  }
 
   public async add(intA: number, intB: number): Promise<number> {
     return this.doActon(Action.ADD, intA, intB);
@@ -26,7 +32,7 @@ export default class Calculator {
   }
 
   private doActon(action: Action, intA: number, intB: number): Promise<number> {
-    return fetch(
+    return this.client.request(
       this.serviceUrl,
       {
         method: 'POST',

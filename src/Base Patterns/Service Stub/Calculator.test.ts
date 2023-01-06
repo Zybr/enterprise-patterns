@@ -1,9 +1,9 @@
 import "isomorphic-fetch";
-import Calculator from "./Calculator";
-import Client from "./Clients/Client";
+import Calculator from "../../Complex patterns/Distribution Patterns/Remote Facade/Calculator/Calculator";
+import StubClient from "./Clients/StubClient";
 
 describe('Calculator', () => {
-  const calculator = new Calculator(new Client());
+  const calculator = new Calculator(new StubClient());
 
   test('add()', async () => {
     expect(

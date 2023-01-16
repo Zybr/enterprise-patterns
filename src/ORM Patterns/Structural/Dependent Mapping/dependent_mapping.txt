@@ -1,6 +1,0 @@
-Использовал Dependent Mapping только в данном учебном проекте:
-    Person *--> Email: 1 - 1
-    ./src/Data Patterns/Data Source/Data Mapper/Dao/Mappers/EmailMapper.ts
-    ./src/Data Patterns/Data Source/Data Mapper/Dao/Mappers/PersonMapper.ts
-PersonMapper мэппает вложенный емаил модели используя EmailMapper.
-Современные ORM делают это самостоятельно.

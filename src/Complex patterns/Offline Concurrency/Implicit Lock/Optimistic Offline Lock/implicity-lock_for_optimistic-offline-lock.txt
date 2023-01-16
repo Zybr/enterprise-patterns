@@ -1,2 +1,0 @@
-Версионирование и контроль конфликтов версий уже включен на уровне менеджера записей - Storage
-    src/Complex patterns/Offline Concurrency/Optimistic Offline Lock/Storage.ts

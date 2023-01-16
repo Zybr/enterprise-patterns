@@ -1,6 +1,0 @@
-Паттерн имеет смысл использовать на группе объектов имеющих максимально тесную связь (композицию):
-    Company *-> Division *-> Department *-> Employee
-    Car *-> Engine
-    Item *-> Position
-    Document *-> Image
-    Storage *-> Product
